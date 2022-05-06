@@ -25,8 +25,6 @@ public class GUIApplication extends Application {
         gridPane.setAlignment(Pos.CENTER);
         versionBox(gridPane);
 
-        Text text1 = new Text("Test");
-        gridPane.add(text1, 1, 1);
 
         Scene scene = new Scene(gridPane);
         stage.setTitle("IterationOne");
