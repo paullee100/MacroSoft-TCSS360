@@ -10,7 +10,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.scene.text.Text;
 
 public class GUIApplication extends Application {
     private final Version myVersion = new Version();
@@ -24,9 +23,6 @@ public class GUIApplication extends Application {
 
         gridPane.setAlignment(Pos.CENTER);
         versionBox(gridPane);
-
-        Text text1 = new Text("Test");
-        gridPane.add(text1, 1, 1);
 
         Scene scene = new Scene(gridPane);
         stage.setTitle("IterationOne");
