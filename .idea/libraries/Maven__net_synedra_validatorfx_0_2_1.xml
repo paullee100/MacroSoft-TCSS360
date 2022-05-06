@@ -1,8 +1,6 @@
 <component name="libraryTable">
   <library name="Maven: net.synedra:validatorfx:0.2.1">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/net/synedra/validatorfx/0.2.1/validatorfx-0.2.1.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/net/synedra/validatorfx/0.2.1/validatorfx-0.2.1-javadoc.jar!/" />
     </JAVADOC>
