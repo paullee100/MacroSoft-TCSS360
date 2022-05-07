@@ -14,10 +14,14 @@ import javafx.scene.text.Text;
 
 public class GUIApplication extends Application {
     private final Version myVersion = new Version();
+    private static final String teamName = "MacroSoft";
+    private User myUser;
     @Override
     public void start(Stage stage) {
+        myUser = new User("ExampleBob", "ExampleBob@gmail.com");
+
         GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.setPadding(new Insets(100, 100, 100, 100));
 
         gridPane.setVgap(5);
         gridPane.setHgap(5);
@@ -25,6 +29,8 @@ public class GUIApplication extends Application {
         gridPane.setAlignment(Pos.CENTER);
         versionBox(gridPane);
 
+        Text text1 = new Text("Welcome...");
+        gridPane.add(text1, 1, 1);
 
         Scene scene = new Scene(gridPane);
         stage.setTitle("IterationOne");
@@ -34,8 +40,16 @@ public class GUIApplication extends Application {
 
     public void versionBox(GridPane gridPane) {
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Version");
-        dialog.setContentText("Version " + myVersion.getVersionNumber());
+        dialog.setTitle("About");
+        StringBuilder content = new StringBuilder();
+
+        content.append("This app is registered to:\n" + myUser.toString());
+        content.append("\nThis app is provided by " + teamName);
+        content.append("\nAuthors: ");
+        content.append("\nGabe Bryan - gabeb544@uw.edu");
+        content.append("\nVersion " + myVersion.getVersionNumber());
+
+        dialog.setContentText(content.toString());
 
         ButtonType exit = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().add(exit);
