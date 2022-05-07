@@ -48,6 +48,8 @@ public class GUIApplication extends Application {
         content.append("\nAuthors: ");
         content.append("\nGabe Bryan - gabeb544@uw.edu");
         content.append("\nAnteh Hsu - gan86650@uw.edu");
+        content.append("\nWei Wei Chien - weiwei88@uw.edu");
+        content.append("\nAlex Larsen - alexlars@uw.edu");
         content.append("\nVersion " + myVersion.getVersionNumber());
 
         dialog.setContentText(content.toString());
