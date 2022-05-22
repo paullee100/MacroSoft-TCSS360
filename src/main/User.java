@@ -10,6 +10,9 @@ package main;
  * @version Spring 2022
  */
 public class User {
+
+    public static User activeUser;
+
     /** Name of the user */
     private String myName;
 
@@ -35,6 +38,7 @@ public class User {
      * @return the correct string format.
      */
     public String toString(){
-        return myName + " - " + myEmailAddress;
+        if(myName.isEmpty()) return "-";
+        return myName;
     }
 }

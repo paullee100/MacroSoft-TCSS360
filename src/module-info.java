@@ -13,4 +13,6 @@ module MacroSoft.TCSS360 {
 
     opens main to javafx.fxml;
     exports main;
+    exports archive;
+    opens archive to javafx.fxml;
 }

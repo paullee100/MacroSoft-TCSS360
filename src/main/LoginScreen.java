@@ -26,27 +26,17 @@ public class LoginScreen {
 
     /** Text to indicate to the user to input username in the text field */
     private final Text username;
-
     /** Text to indicate to the user to input password in the text field */
     private final Text password;
-
     /** Textfield for the user to input their username */
     private final TextField inputUser;
-
     /** Textfield for the user to input their password */
     private final TextField inputPass;
 
     /** Button to submit both textfield to login */
     private final Button submitButton;
-
     /** Button to quit the program */
     private final Button quitButton;
-
-    /** Uses string to check if the username is correct */
-    private String checkUser;
-
-    /** Uses string to check if the password is correct */
-    private String checkPass;
 
     /** Checks if the user inputted the correct information */
     private Boolean loginComplete = false;
@@ -103,10 +93,13 @@ public class LoginScreen {
         // Everytime the button is pressed, it checks the
         // text string in the text field.
         submitButton.setOnAction(actionEvent -> {
-            checkUser = inputUser.getText();
-            checkPass = inputPass.getText();
-
-            // Username and password checker and if correct
+            String checkUser = inputUser.getText();
+            String checkPass = inputPass.getText();
+            System.out.println(checkUser + " " + checkPass);
+            User.activeUser = new User(checkUser, checkPass);
+            stage.setScene(mainPage);
+            loginComplete = true;
+            /*// Username and password checker and if correct
             // changes the scene to the main page. (case-sensitive).
             // return boolean is not necessary, but could be useful.
             // If it is not useful, we can easily change it to void and delete the loginComplete.
@@ -115,7 +108,7 @@ public class LoginScreen {
                 loginComplete = true;
             } else {
                 System.out.println("Incorrect Password"); // Testing to see if user inputs incorrect info
-            }
+            }*/
 
         });
 

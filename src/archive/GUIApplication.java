@@ -1,4 +1,4 @@
-package main;
+package archive;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -9,12 +9,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.User;
+import main.Settings;
 
 public class GUIApplication extends Application {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 500;
 
-    private final Version myVersion = new Version();
+    private final Settings myVersion = new Settings();
     private static final String teamName = "MacroSoft";
     private User myUser;
     @Override
@@ -44,14 +46,14 @@ public class GUIApplication extends Application {
         versionBox(horizontalBox, button);
         horizontalBox.getChildren().addAll(button,saveButton,loadButton);
 
-        VBox verticalBox = new VBox();
+        /*VBox verticalBox = new VBox();
         Button deleteButton = new Button("Delete");
         deleteButton.setPrefSize(75,75);
         Button createFolder = new Button("Create Folder");
         createFolder.setPrefSize(75,75);
         Button homeButton = new Button("Home");
         homeButton.setPrefSize(75,75);
-        verticalBox.getChildren().addAll(deleteButton,createFolder,homeButton);
+        verticalBox.getChildren().addAll(deleteButton,createFolder,homeButton);*/
 
         Pane pane = new Pane();
         Text text1 = new Text("Welcome...");
@@ -60,7 +62,7 @@ public class GUIApplication extends Application {
 
         // Places the layouts in the border pane
         borderPane.setBottom(horizontalBox);
-        borderPane.setRight(verticalBox);
+        //borderPane.setRight(verticalBox);
         borderPane.setCenter(text1);
         borderPane.setLeft(mainTabBar(stage));
 

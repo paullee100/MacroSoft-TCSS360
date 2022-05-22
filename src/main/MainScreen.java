@@ -21,14 +21,8 @@ import javafx.scene.text.Text;
  */
 public class MainScreen {
 
-    /** The name of our team name */
-    private static final String teamName = "MacroSoft";
-
     /** Version number of the application */
-    private final Version myVersion;
-
-    /** The user of the application */
-    private final User myUser;
+    //private final Settings myVersion;
 
     /** Layout used for the application */
     private final BorderPane borderPane;
@@ -63,9 +57,6 @@ public class MainScreen {
      * in this method.
      */
     public MainScreen() {
-        myUser = new User("ExampleBob", "ExampleBob@gmail.com");
-
-        myVersion = new Version();
 
         borderPane = new BorderPane();
         hBox = new HBox();
@@ -91,8 +82,12 @@ public class MainScreen {
         saveButton.setPrefSize(75,75);
         loadButton.setPrefSize(75,75);
 
+        //Set button actions here
+        aboutButton.setOnAction(e -> versionBox());
+        saveButton.setOnAction(e -> Settings.saveSettings());
+        loadButton.setOnAction(e -> Settings.loadSettings());
+
         hBox.setSpacing(5);
-        versionBox();
         hBox.getChildren().addAll(aboutButton,saveButton,loadButton);
 
         deleteButton.setPrefSize(75,75);
@@ -119,23 +114,12 @@ public class MainScreen {
     private void versionBox() {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("About");
-        StringBuilder content = new StringBuilder();
 
-        content.append("This app is registered to:\n" + myUser.toString());
-        content.append("\nThis app is provided by " + teamName);
-        content.append("\nAuthors: ");
-        content.append("\nGabe Bryan - gabeb544@uw.edu");
-        content.append("\nAnteh Hsu - gan86650@uw.edu");
-        content.append("\nWei Wei Chien - weiwei88@uw.edu");
-        content.append("\nAlex Larsen - alexlars@uw.edu");
-        content.append("\nPaul Lee - plee83@uw.edu");
-        content.append("\nVersion " + myVersion.getVersionNumber());
-
-        dialog.setContentText(content.toString());
+        dialog.setContentText(Settings.printAbout());
 
         ButtonType exit = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().add(exit);
 
-        aboutButton.setOnAction(e -> dialog.showAndWait());
+        dialog.showAndWait();
     }
 }
