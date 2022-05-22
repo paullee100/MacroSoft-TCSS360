@@ -1,30 +1,38 @@
-package main;
+package archive;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.User;
+import main.Settings;
 
 public class GUIApplication extends Application {
-    private final Version myVersion = new Version();
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 500;
+
+    private final Settings myVersion = new Settings();
     private static final String teamName = "MacroSoft";
     private User myUser;
     @Override
     public void start(Stage stage) {
         myUser = new User("ExampleBob", "ExampleBob@gmail.com");
 
-        Scene scene = new Scene(loginScreen(stage), 500, 500);
+        Scene scene = new Scene(loginScreen(stage), WIDTH, HEIGHT);
         stage.setTitle("IterationOne");
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
     }
 
-    private BorderPane mainScreen() {
+    private BorderPane mainScreen(Stage stage) {
         BorderPane borderPane = new BorderPane();
+        Background background = new Background(new BackgroundFill(Color.rgb(51, 45, 64), CornerRadii.EMPTY, Insets.EMPTY));
+        borderPane.setBackground(background);
 
         HBox horizontalBox = new HBox();
         Button button = new Button("About");
@@ -38,26 +46,52 @@ public class GUIApplication extends Application {
         versionBox(horizontalBox, button);
         horizontalBox.getChildren().addAll(button,saveButton,loadButton);
 
-        VBox verticalBox = new VBox();
+        /*VBox verticalBox = new VBox();
         Button deleteButton = new Button("Delete");
         deleteButton.setPrefSize(75,75);
         Button createFolder = new Button("Create Folder");
         createFolder.setPrefSize(75,75);
         Button homeButton = new Button("Home");
         homeButton.setPrefSize(75,75);
-        verticalBox.getChildren().addAll(deleteButton,createFolder,homeButton);
+        verticalBox.getChildren().addAll(deleteButton,createFolder,homeButton);*/
 
         Pane pane = new Pane();
         Text text1 = new Text("Welcome...");
+        text1.setFill(Color.WHITE);
         pane.getChildren().add(text1);
 
         // Places the layouts in the border pane
-        borderPane.setTop(horizontalBox);
-        borderPane.setRight(verticalBox);
+        borderPane.setBottom(horizontalBox);
+        //borderPane.setRight(verticalBox);
         borderPane.setCenter(text1);
+        borderPane.setLeft(mainTabBar(stage));
 
         return borderPane;
     }
+
+    /**
+     * This tab bar is for navigating between the different screens in the application.
+     * For example there is a home button that takes you to the home screen.
+     * @author Gabriel Bryan
+     * @param stage
+     * @return the virtual box element of the main tab bar
+     */
+    private VBox mainTabBar(Stage stage) {
+        VBox tabBar = new VBox();
+
+        Button home = new Button("Home");
+        home.setPrefSize(75, 75);
+        Button search = new Button("Search");
+        search.setPrefSize(75, 75);
+        Button insertDoc = new Button("Insert Document");
+        insertDoc.setPrefSize(75, 75);
+
+        Background background = new Background(new BackgroundFill(Color.rgb(55, 50, 77), CornerRadii.EMPTY, Insets.EMPTY));
+        tabBar.setBackground(background);
+        tabBar.getChildren().addAll(home, search, insertDoc);
+        return tabBar;
+    }
+
     private GridPane loginScreen(Stage stage) {
         GridPane gridPane = new GridPane();
         Text username = new Text("Username/Email: ");
@@ -89,7 +123,7 @@ public class GUIApplication extends Application {
 
     private void accountInput(TextField inputUser, TextField inputPass, Button submit, Stage stage) {
        // if (inputUser.getCharacters().equals("5") && inputPass.getCharacters().equals("5")) {
-            Scene mainScene = new Scene(mainScreen(), 500, 500);
+            Scene mainScene = new Scene(mainScreen(stage), WIDTH, HEIGHT);
             submit.setOnAction(e -> stage.setScene(mainScene));
             stage.show();
       //  }
