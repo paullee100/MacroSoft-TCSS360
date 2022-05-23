@@ -31,6 +31,10 @@ public class User {
         myEmailAddress = email;
     }
 
+    public String getUserName(){ return myName;}
+
+    public String getEmailAddress() {return myEmailAddress;}
+
     /**
      * Overrides the toString method to print out the correct
      * string of the User object.
