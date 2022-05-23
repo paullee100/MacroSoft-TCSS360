@@ -35,7 +35,7 @@ public class GUIController extends Application {
     public void start(Stage stage) {
         loginScreen = new LoginScreen();
 
-        stage.setTitle("IterationOne");
+        stage.setTitle("IterationTwo");
         Scene loginPage = new Scene(loginScreen.loginGUI(), WIDTH, HEIGHT);
 
         stage.setScene(loginPage);

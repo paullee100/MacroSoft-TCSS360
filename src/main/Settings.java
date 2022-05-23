@@ -3,6 +3,12 @@
  */
 package main;
 
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.*;
+
 /**
  * This class prevents the version number to be hard coded into
  * the GUI and version number can be adjusted easily in this class.
@@ -14,6 +20,7 @@ public class Settings {
 
     /** The name of our team name */
     private static final String TEAM_NAME = "MacroSoft";
+
     /**
      * Version number of the application.
      */
@@ -59,13 +66,40 @@ public class Settings {
         return content.toString();
     }
 
-    public static void saveSettings()
-    {
+    public static void saveSettings() throws FileNotFoundException {
+        Stage aStage = new Stage();
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("CSV files (*.CSV)", "*.csv");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(filter);
+
+        try {
+            File theFile = fileChooser.showSaveDialog(aStage);
+
+            PrintWriter writer = new PrintWriter(theFile);
+            writer.println(User.activeUser.getUserName() + "," + User.activeUser.getEmailAddress());
+            writer.close();
+        }catch (NullPointerException e) {
+            System.out.println("No File Selected");
+        }
 
     }
 
-    public static void loadSettings()
-    {
+    public static void loadSettings() throws Exception {
+        Stage aStage = new Stage();
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("CSV files (*.CSV)", "*.csv");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(filter);
+        try {
+            File theFile = fileChooser.showOpenDialog(aStage);
 
+            FileReader fileReader = new FileReader(theFile);
+            BufferedReader reader = new BufferedReader(fileReader);
+            String dataRow = reader.readLine();
+            String[] data = dataRow.split(",");
+
+            User.activeUser = new User(data[0], data[1]);
+        } catch (NullPointerException e){
+            System.out.println("No File Selected");
+        }
     }
 }

@@ -47,8 +47,8 @@ public class LoginScreen {
     public LoginScreen() {
         gridPane = new GridPane();
 
-        username = new Text("Username/Email: ");
-        password = new Text("Password: ");
+        username = new Text("Username: ");
+        password = new Text("Email: ");
 
         inputUser = new TextField();
         inputPass = new TextField();
@@ -94,16 +94,16 @@ public class LoginScreen {
         // text string in the text field.
         submitButton.setOnAction(actionEvent -> {
             String checkUser = inputUser.getText();
-            String checkPass = inputPass.getText();
-            System.out.println(checkUser + " " + checkPass);
-            User.activeUser = new User(checkUser, checkPass);
+            String checkEmail = inputPass.getText();
+            System.out.println(checkUser + " " + checkEmail);
+            User.activeUser = new User(checkUser, checkEmail);
             stage.setScene(mainPage);
             loginComplete = true;
             /*// Username and password checker and if correct
             // changes the scene to the main page. (case-sensitive).
             // return boolean is not necessary, but could be useful.
             // If it is not useful, we can easily change it to void and delete the loginComplete.
-            if (checkUser.equals("MacroSoft") && checkPass.equals("tcss360")) {
+            if (checkUser.equals("MacroSoft") && checkEmail.equals("tcss360")) {
                 stage.setScene(mainPage);
                 loginComplete = true;
             } else {
