@@ -1,7 +1,7 @@
 /*
  *
  */
-package main;
+package main.GUI;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,13 +10,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.data.User;
 
 /**
  * A class to make the log in GUI and checks the
  * user inputted credentials before allowing them
  * into the program.
  *
- * @author Paul Lee,
+ * @author Paul Lee, Gabriel Bryan
  * @version Spring 2022
  */
 public class LoginScreen {
@@ -41,20 +42,34 @@ public class LoginScreen {
     /** Checks if the user inputted the correct information */
     private Boolean loginComplete = false;
 
+    /** The GUI Controller that the app returns too after finishing the login procedure */
+    private GUIController guiControl;
+
     /**
      * Constructor that initializes the instance field.
      */
-    public LoginScreen() {
+    public LoginScreen(GUIController theController) {
+        //Sets up the controller
+        guiControl = theController;
+
         gridPane = new GridPane();
 
+        //Initializes the text prompts
         username = new Text("Username: ");
+        username.getStyleClass().add("custom-text");
         password = new Text("Email: ");
+        password.getStyleClass().add("custom-text");
 
+        //Sets up the text field boxes
         inputUser = new TextField();
+        inputUser.getStyleClass().add("custom-text-entry");
         inputPass = new TextField();
+        inputPass.getStyleClass().add("custom-text-entry");
 
         submitButton = new Button("Submit");
+        submitButton.getStyleClass().add("custom-button");
         quitButton = new Button("Quit");
+        quitButton.getStyleClass().add("custom-button");
     }
 
     /**
@@ -89,6 +104,7 @@ public class LoginScreen {
     public boolean accountInput(Stage stage) {
         MainScreen mainScreen = new MainScreen();
         Scene mainPage = new Scene(mainScreen.homePage(), GUIController.WIDTH, GUIController.HEIGHT);
+        mainPage.getStylesheets().add("main/resources/StyleSheet.css");
 
         // Everytime the button is pressed, it checks the
         // text string in the text field.
@@ -97,12 +113,13 @@ public class LoginScreen {
             String checkEmail = inputPass.getText();
             System.out.println(checkUser + " " + checkEmail);
             User.activeUser = new User(checkUser, checkEmail);
-            stage.setScene(mainPage);
+            guiControl.buildMainView();
+            //stage.setScene(mainPage);
             loginComplete = true;
-            /*// Username and password checker and if correct
-            // changes the scene to the main page. (case-sensitive).
-            // return boolean is not necessary, but could be useful.
-            // If it is not useful, we can easily change it to void and delete the loginComplete.
+            /* Username and password checker and if correct
+            changes the scene to the main page. (case-sensitive).
+            return boolean is not necessary, but could be useful.
+            If it is not useful, we can easily change it to void and delete the loginComplete.
             if (checkUser.equals("MacroSoft") && checkEmail.equals("tcss360")) {
                 stage.setScene(mainPage);
                 loginComplete = true;
@@ -110,6 +127,10 @@ public class LoginScreen {
                 System.out.println("Incorrect Password"); // Testing to see if user inputs incorrect info
             }*/
 
+        });
+
+        quitButton.setOnAction(e -> {
+            System.exit(0);
         });
 
         return loginComplete;

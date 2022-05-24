@@ -1,7 +1,7 @@
 /*
  *
  */
-package main;
+package main.data;
 
 /**
  * User class

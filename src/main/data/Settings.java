@@ -1,9 +1,8 @@
 /*
  *
  */
-package main;
+package main.data;
 
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -46,12 +45,15 @@ public class Settings {
 
     public static String printAbout(){
         StringBuilder content = new StringBuilder();
+
+        //prints off the user
         if(User.activeUser != null) {
             content.append("This app is registered to:\n" + User.activeUser.toString());
         }else{
             content.append("Error: No User");
         }
 
+        //Prints off our team name
         content.append("\nThis app is provided by " + getTeamName());
 
         //Print collaborators
@@ -61,7 +63,7 @@ public class Settings {
             content.append(collaborators[i]);
         }
 
-
+        //Prints of the version
         content.append("\nVersion " + getVersionNumber());
         return content.toString();
     }
