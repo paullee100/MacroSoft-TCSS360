@@ -3,6 +3,11 @@
  */
 package main.GUI;
 
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
+import javafx.stage.StageStyle;
 import main.GUI.tabs.InsertDocument;
 import main.GUI.tabs.ItemController;
 import javafx.application.Application;
@@ -38,6 +43,9 @@ public class GUIController extends Application {
     /** This is the stage for the application that will be used throughout its execution */
     private static Stage myStage;
 
+    /** keeps track of where the mouse was clicked for drag event */
+    private double mouseX, mouseY;
+
     /**
      * Starts up with the log in screen and calls the accountInput method
      * in the LoginScreen class to check the credentials before
@@ -50,6 +58,7 @@ public class GUIController extends Application {
         createTabs();
 
         myStage = stage;
+        myStage.initStyle(StageStyle.TRANSPARENT);
 
         loginScreen = new LoginScreen(this);
 
@@ -76,6 +85,60 @@ public class GUIController extends Application {
         //Add the elements
         mainPane.setLeft(tabs);
         myStage.setMaximized(true);
+
+        //Sets up the toolbar
+        mainPane.setTop(createToolBar());
+    }
+
+    public HBox createToolBar() {
+        HBox toolBar = new HBox();
+        toolBar.getStyleClass().add("toolbar");
+        toolBar.setAlignment(Pos.CENTER_RIGHT);
+        toolBar.setSpacing(10);
+        toolBar.setPadding(new Insets(5));
+
+        toolBar.setOnMousePressed(mouseEvent -> {
+            mouseX = mouseEvent.getSceneX();
+            mouseY = mouseEvent.getSceneY();
+            double width = myStage.getWidth();
+            double height = myStage.getHeight();
+            myStage.setMaximized(false);
+            myStage.setHeight(height);
+            myStage.setWidth(width);
+        });
+        toolBar.setOnMouseDragged(mouseEvent -> {
+            myStage.setX(mouseEvent.getScreenX()-mouseX);
+            myStage.setY(mouseEvent.getScreenY()-mouseY);
+        });
+        toolBar.setOnMouseDragReleased(mouseEvent -> {
+            myStage.setMaximized(true);
+        });
+
+        Button min = new Button("-");
+        min.getStyleClass().add("custom-button");
+        min.setOnAction(e -> {
+            myStage.setIconified(true);
+        });
+        toolBar.getChildren().add(min);
+
+
+        Button max = new Button("o");
+        max.getStyleClass().add("custom-button");
+        max.setOnAction(e -> {
+            myStage.setMaximized(!myStage.isMaximized());
+        });
+        toolBar.getChildren().add(max);
+
+        Button close = new Button("x");
+        close.getStyleClass().add("custom-button");
+        close.setOnAction(e -> {
+            System.exit(0);
+        });
+        toolBar.getChildren().add(close);
+
+
+
+        return toolBar;
     }
 
 

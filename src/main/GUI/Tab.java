@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public abstract class Tab {
     private Button tabButton;
 
-    private static final int BUTTON_SIZE = 125;
+    private static final int BUTTON_SIZE = 100;
 
     public Tab (String buttonName, Image icon) {
         tabButton = new Button();

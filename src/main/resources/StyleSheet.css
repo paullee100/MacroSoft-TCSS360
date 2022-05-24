@@ -8,7 +8,6 @@
     -fx-background-radius: 20;
     -fx-padding: 5;
     -fx-background-color: #282b38;
-    /*-fx-background-color: rgb(55, 50, 77);*/
 }
 .custom-button:hover {
     -fx-background-color: #393d4f;
@@ -30,4 +29,8 @@
 .custom-text-entry {
     -fx-background-color: #393d4f;
     -fx-text-fill: rgb(200, 200, 200);
+}
+
+.toolbar {
+    -fx-background-color: #1d1f29;
 }
