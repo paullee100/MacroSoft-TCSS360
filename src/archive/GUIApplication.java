@@ -9,8 +9,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.User;
-import main.Settings;
+import main.data.User;
+import main.data.Settings;
 
 public class GUIApplication extends Application {
     private static final int WIDTH = 800;
