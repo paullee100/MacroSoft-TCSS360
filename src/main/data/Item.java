@@ -3,18 +3,17 @@ package main.data;
 import java.util.*;
 
 public class Item {
-    private ArrayList<String> files;
+    private ArrayList<ItemFile> files;
 
     public Item() {
-        files = new ArrayList<String>();
+        files = new ArrayList<ItemFile>();
     }
 
-
-    public void addFile(String path) {
-        files.add(path);
+    public void addFile(ItemFile file) {
+        files.add(file);
     }
 
-    public ArrayList<String> getFiles() {
-        return (ArrayList<String>)files.clone();
+    public ArrayList<ItemFile> getFiles() {
+        return (ArrayList<ItemFile>)files.clone();
     }
 }
