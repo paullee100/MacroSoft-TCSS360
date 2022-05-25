@@ -38,7 +38,7 @@ public class MainScreen {
     /** Button used to display the About screen */
     private final Button aboutButton;
 
-    /** Button to save the informations */
+    /** Button to save the information */
     private final Button saveButton;
 
     /** Button to load any saved information */
