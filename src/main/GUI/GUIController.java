@@ -49,20 +49,18 @@ public class GUIController extends Application {
     private double mouseX, mouseY;
 
     /**
-     * Starts up with the log in screen and calls the accountInput method
+     * Starts up with the log in screen
      * in the LoginScreen class to check the credentials before
      * moving to the main screen.
      * @param stage to set the scene and to display the GUI to the user.
      */
     @Override
     public void start(Stage stage) {
-        //Create tabs
-        createTabs();
 
         myStage = stage;
         myStage.initStyle(StageStyle.UNDECORATED);
 
-        loginScreen = new LoginScreen(this);
+        loginScreen = new LoginScreen(this, myStage);
 
         stage.setTitle("IterationTwo");
         Scene loginPage = new Scene(loginScreen.loginGUI(), WIDTH, HEIGHT);
@@ -71,10 +69,12 @@ public class GUIController extends Application {
         stage.setScene(loginPage);
         stage.show();
 
-        loginScreen.accountInput(stage);
-
     }
 
+    /**
+     * Builds the application view
+     * this method is called after login is successful.
+     */
     public void buildMainView() {
         VBox tabs = tabChanger();
 
@@ -92,6 +92,10 @@ public class GUIController extends Application {
         mainPane.setTop(createToolBar());
     }
 
+    /**
+     * Generates a custom title/toolbar for the application
+     * @return a horizontal box with min, max, and close buttons
+     */
     public HBox createToolBar() {
         HBox toolBar = new HBox();
         toolBar.getStyleClass().add("toolbar");
@@ -99,6 +103,9 @@ public class GUIController extends Application {
         toolBar.setSpacing(10);
         toolBar.setPadding(new Insets(5));
 
+        /**This section is for being able to drag the application from the toolbar.
+         * When the mouse is pressed, the coordinates are saved in mouseX, and mouseY.
+         * This is so that the application can keep track of its position relative to the mouse.*/
         toolBar.setOnMousePressed(mouseEvent -> {
             mouseX = mouseEvent.getSceneX();
             mouseY = mouseEvent.getSceneY();
@@ -116,6 +123,7 @@ public class GUIController extends Application {
             myStage.setMaximized(true);
         });
 
+        //Creates the minimize button.
         Button min = new Button(" - ");
         min.getStyleClass().add("tool-bar-button");
         min.setOnAction(e -> {
@@ -123,7 +131,7 @@ public class GUIController extends Application {
         });
         toolBar.getChildren().add(min);
 
-
+        //Creates the maximize button.
         Button max = new Button(" o ");
         max.getStyleClass().add("tool-bar-button");
         max.setOnAction(e -> {
@@ -131,6 +139,7 @@ public class GUIController extends Application {
         });
         toolBar.getChildren().add(max);
 
+        //Creates the close button
         Button close = new Button(" x ");
         close.getStyleClass().add("close-button");
         close.setOnAction(e -> {
@@ -138,13 +147,19 @@ public class GUIController extends Application {
         });
         toolBar.getChildren().add(close);
 
-
+        //TODO: Add a title to the toolbar that appears on the left side.
 
         return toolBar;
     }
 
 
+    /**
+     * This creates the tab changer that exists on the left side of the application.
+     * When a tab button is pressed, the tab will change.
+     * @return a vertical box with buttons for changing tabs.
+     */
     public VBox tabChanger() {
+        createTabs();
         VBox tabBar = new VBox();
         tabBar.setSpacing(10);
 
@@ -161,20 +176,23 @@ public class GUIController extends Application {
 
     /**
      * Main method to launch the GUI.
-     *
      * @param args argument
      */
     public static void main(String[] args) {
-
         launch(args);
     }
 
+    /**
+     * This initializes the tabs and generates all their tab buttons.
+     */
     private void createTabs() {
+        //Initialize tabs
         tabs = new Tab[3];
         tabs[0] = new ItemController("Home", new Image("/homeIcon.png"));
         tabs[1] = new Search("Search", new Image("/searchIcon.png"));
         tabs[2] = new InsertDocument("Insert Document", new Image("/documentIcon.png"));
 
+        //Generates tab buttons
         for(int i = 0; i < tabs.length; i++){
             Tab currTab = tabs[i];
             currTab.getTabButton().setOnAction(e -> {

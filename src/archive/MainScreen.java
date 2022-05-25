@@ -1,7 +1,7 @@
 /*
  *
  */
-package main.GUI;
+package archive;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -23,9 +23,6 @@ import java.io.FileNotFoundException;
  * @version Spring 2022
  */
 public class MainScreen {
-
-    /** Version number of the application */
-    //private final Settings myVersion;
 
     /** Layout used for the application */
     private final BorderPane borderPane;

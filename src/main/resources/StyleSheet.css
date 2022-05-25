@@ -3,17 +3,18 @@
     -fx-background-color: #1b1b26;
     -fx-font-size: 12;
 }
-.custom-button{
+.squircle-button{
     -fx-text-fill: rgb(200, 200, 200);
     -fx-border-radius: 20;
     -fx-background-radius: 20;
     -fx-padding: 5;
     -fx-background-color: #282b38;
 }
-.custom-button:hover {
+.squircle-button:hover {
     -fx-background-color: #393d4f;
 }
 
+/* Used for the minimize and maximize toolbar buttons */
 .tool-bar-button {
     -fx-text-fill: rgb(200, 200, 200);
     -fx-font-size: 14pt;
@@ -26,6 +27,7 @@
     -fx-background-color: #393d4f;
 }
 
+/* used for the close application button */
 .close-button {
     -fx-text-fill: rgb(200, 200, 200);
     -fx-font-size: 14pt;
@@ -38,6 +40,7 @@
     -fx-background-color: red;
 }
 
+/* This is used for the tab buttons */
 .transparent-square-button{
     -fx-text-fill: rgb(200, 200, 200);
     -fx-padding: 5;
@@ -47,15 +50,16 @@
     -fx-background-color: #393d4f;
 }
 
-.custom-text{
-    -fx-fill: rgb(200, 200, 200);
-}
-
 .custom-text-entry {
     -fx-background-color: #393d4f;
     -fx-text-fill: rgb(200, 200, 200);
 }
 
+.white-text {
+    -fx-fill: rgb(200, 200, 200);
+}
+
+/* Used for the title/toolbar at the top of the application*/
 .toolbar {
     -fx-background-color: #1d1f29;
 }

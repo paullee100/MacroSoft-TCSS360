@@ -6,7 +6,7 @@ package main.data;
 /**
  * User class
  *
- * @author Gabe Bryan
+ * @author Gabriel Bryan
  * @version Spring 2022
  */
 public class User {

@@ -7,7 +7,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.data.User;
@@ -22,7 +24,10 @@ import main.data.User;
  */
 public class LoginScreen {
 
-    /** Layout used for the application */
+    /**Layout for the application as a whole*/
+    private final BorderPane borderPane;
+
+    /** Layout used for the application window */
     private final GridPane gridPane;
 
     /** Text to indicate to the user to input username in the text field */
@@ -45,31 +50,36 @@ public class LoginScreen {
     /** The GUI Controller that the app returns too after finishing the login procedure */
     private GUIController guiControl;
 
+    private Stage myStage;
     /**
      * Constructor that initializes the instance field.
      */
-    public LoginScreen(GUIController theController) {
-        //Sets up the controller
+    public LoginScreen(GUIController theController, Stage stage) {
+        //Initializes the field variables passed as parameters
         guiControl = theController;
+        myStage = stage;
 
+        //Initializes the panes for the application
         gridPane = new GridPane();
+        borderPane = new BorderPane();
 
         //Initializes the text prompts
         username = new Text("Username: ");
-        username.getStyleClass().add("custom-text");
+        username.getStyleClass().add("white-text");
         password = new Text("Email: ");
-        password.getStyleClass().add("custom-text");
+        password.getStyleClass().add("white-text");
 
-        //Sets up the text field boxes
+        //Initializes the text field boxes
         inputUser = new TextField();
         inputUser.getStyleClass().add("custom-text-entry");
         inputPass = new TextField();
         inputPass.getStyleClass().add("custom-text-entry");
 
+        //Initialize buttons
         submitButton = new Button("Submit");
-        submitButton.getStyleClass().add("custom-button");
+        submitButton.getStyleClass().add("squircle-button");
         quitButton = new Button("Quit");
-        quitButton.getStyleClass().add("custom-button");
+        quitButton.getStyleClass().add("squircle-button");
     }
 
     /**
@@ -77,13 +87,16 @@ public class LoginScreen {
      *
      * @return the log in GUI.
      */
-    public GridPane loginGUI() {
-        gridPane.setMinSize(200, 200);
+    public Pane loginGUI() {
+
+        //Sets the size, and spacing of the login page.
+        gridPane.setMinSize(500,  500);
         gridPane.setHgap(5);
         gridPane.setVgap(5);
 
         gridPane.setAlignment(Pos.CENTER);
 
+        //Adds all elements to the grid pane.
         gridPane.add(username, 0, 0);
         gridPane.add(inputUser, 1, 0);
         gridPane.add(password, 0, 1);
@@ -91,7 +104,14 @@ public class LoginScreen {
         gridPane.add(submitButton, 0, 2);
         gridPane.add(quitButton, 1, 2);
 
-        return gridPane;
+        //Adds the elements to the border pane.
+        borderPane.setTop(guiControl.createToolBar());
+        borderPane.setCenter(gridPane);
+
+        //Generates the submit button as well as login verification.
+        accountInput();
+
+        return borderPane;
     }
 
     /**
@@ -101,10 +121,7 @@ public class LoginScreen {
      *
      * @return true if user inputted correct credentials, false otherwise.
      */
-    public boolean accountInput(Stage stage) {
-        MainScreen mainScreen = new MainScreen();
-        Scene mainPage = new Scene(mainScreen.homePage(), GUIController.WIDTH, GUIController.HEIGHT);
-        mainPage.getStylesheets().add("main/resources/StyleSheet.css");
+    public boolean accountInput() {
 
         // Everytime the button is pressed, it checks the
         // text string in the text field.
@@ -116,6 +133,7 @@ public class LoginScreen {
             guiControl.buildMainView();
             //stage.setScene(mainPage);
             loginComplete = true;
+
             /* Username and password checker and if correct
             changes the scene to the main page. (case-sensitive).
             return boolean is not necessary, but could be useful.

@@ -12,7 +12,7 @@ import java.io.*;
  * This class prevents the version number to be hard coded into
  * the GUI and version number can be adjusted easily in this class.
  *
- * @author Paul Lee
+ * @author Paul Lee, Gabriel Bryan
  * @version Spring 2022
  */
 public class Settings {
