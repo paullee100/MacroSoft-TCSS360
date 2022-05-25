@@ -1,6 +1,7 @@
 .root{
     /*-fx-background-color: rgb(41, 38, 46);*/
     -fx-background-color: #1b1b26;
+    -fx-font-size: 12;
 }
 .custom-button{
     -fx-text-fill: rgb(200, 200, 200);
@@ -12,8 +13,22 @@
 .custom-button:hover {
     -fx-background-color: #393d4f;
 }
+
+.tool-bar-button {
+    -fx-text-fill: rgb(200, 200, 200);
+    -fx-font-size: 14pt;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+    -fx-background-color: #282b38;
+}
+.tool-bar-button:hover {
+    -fx-background-color: #393d4f;
+}
+
 .close-button {
     -fx-text-fill: rgb(200, 200, 200);
+    -fx-font-size: 14pt;
     -fx-border-radius: 20;
     -fx-background-radius: 20;
     -fx-padding: 5;

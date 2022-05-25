@@ -117,7 +117,7 @@ public class GUIController extends Application {
         });
 
         Button min = new Button(" - ");
-        min.getStyleClass().add("custom-button");
+        min.getStyleClass().add("tool-bar-button");
         min.setOnAction(e -> {
             myStage.setIconified(true);
         });
@@ -125,7 +125,7 @@ public class GUIController extends Application {
 
 
         Button max = new Button(" o ");
-        max.getStyleClass().add("custom-button");
+        max.getStyleClass().add("tool-bar-button");
         max.setOnAction(e -> {
             myStage.setMaximized(!myStage.isMaximized());
         });
