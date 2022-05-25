@@ -43,6 +43,8 @@ public class GUIController extends Application {
     /** This is the stage for the application that will be used throughout its execution */
     private static Stage myStage;
 
+    private static BorderPane mainPane;
+
     /** keeps track of where the mouse was clicked for drag event */
     private double mouseX, mouseY;
 
@@ -58,7 +60,7 @@ public class GUIController extends Application {
         createTabs();
 
         myStage = stage;
-        myStage.initStyle(StageStyle.TRANSPARENT);
+        myStage.initStyle(StageStyle.UNDECORATED);
 
         loginScreen = new LoginScreen(this);
 
@@ -76,7 +78,7 @@ public class GUIController extends Application {
     public void buildMainView() {
         VBox tabs = tabChanger();
 
-        BorderPane mainPane = new BorderPane();
+        mainPane = new BorderPane();
 
         Scene mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainScene.getStylesheets().add("/StyleSheet.css");
@@ -114,7 +116,7 @@ public class GUIController extends Application {
             myStage.setMaximized(true);
         });
 
-        Button min = new Button("-");
+        Button min = new Button(" - ");
         min.getStyleClass().add("custom-button");
         min.setOnAction(e -> {
             myStage.setIconified(true);
@@ -122,15 +124,15 @@ public class GUIController extends Application {
         toolBar.getChildren().add(min);
 
 
-        Button max = new Button("o");
+        Button max = new Button(" o ");
         max.getStyleClass().add("custom-button");
         max.setOnAction(e -> {
             myStage.setMaximized(!myStage.isMaximized());
         });
         toolBar.getChildren().add(max);
 
-        Button close = new Button("x");
-        close.getStyleClass().add("custom-button");
+        Button close = new Button(" x ");
+        close.getStyleClass().add("close-button");
         close.setOnAction(e -> {
             System.exit(0);
         });
@@ -172,5 +174,12 @@ public class GUIController extends Application {
         tabs[0] = new ItemController("Home", new Image("/homeIcon.png"));
         tabs[1] = new Search("Search", new Image("/searchIcon.png"));
         tabs[2] = new InsertDocument("Insert Document", new Image("/documentIcon.png"));
+
+        for(int i = 0; i < tabs.length; i++){
+            Tab currTab = tabs[i];
+            currTab.getTabButton().setOnAction(e -> {
+                mainPane.setCenter(currTab.buildView(myStage));
+            });
+        }
     }
 }

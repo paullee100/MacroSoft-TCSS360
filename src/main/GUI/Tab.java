@@ -19,8 +19,8 @@ public abstract class Tab {
         tabButton.setTooltip(new Tooltip(buttonName));
 
         ImageView iconView = new ImageView(icon);
-        iconView.setFitHeight(BUTTON_SIZE);
-        iconView.setFitWidth(BUTTON_SIZE);
+        iconView.setFitHeight(BUTTON_SIZE * .65);
+        iconView.setFitWidth(BUTTON_SIZE * .65);
         tabButton.setGraphic(iconView);
     }
 

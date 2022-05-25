@@ -12,7 +12,6 @@
     <orderEntry type="library" name="Maven: org.apiguardian:apiguardian-api:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: net.synedra:validatorfx:0.2.1" level="project" />
     <orderEntry type="library" name="Maven: eu.hansolo:tilesfx:11.48" level="project" />
-    <orderEntry type="library" exported="" name="lib" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
@@ -33,5 +32,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
