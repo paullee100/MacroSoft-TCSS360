@@ -2,17 +2,13 @@ module MacroSoft.TCSS360 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-   // requires junit;
 
-//    requires org.controlsfx.controls;
-//    requires com.dlsc.formsfx;
-//    requires validatorfx;
-//    requires org.kordamp.ikonli.javafx;
-//    requires org.kordamp.bootstrapfx.core;
-//    requires eu.hansolo.tilesfx;
-
-    opens main to javafx.fxml;
-    exports main;
+    opens main.GUI to javafx.fxml;
     exports archive;
     opens archive to javafx.fxml;
+    //exports main;
+    exports main.data;
+    opens main.data to javafx.fxml;
+    exports main.GUI;
+    //opens main.GUI to javafx.fxml;
 }

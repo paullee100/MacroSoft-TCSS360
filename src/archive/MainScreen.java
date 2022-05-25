@@ -1,7 +1,7 @@
 /*
  *
  */
-package main;
+package archive;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -11,6 +11,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import main.data.Settings;
+
+import java.io.FileNotFoundException;
 
 /**
  * GUI for the main screen where it is considered
@@ -20,9 +23,6 @@ import javafx.scene.text.Text;
  * @version Spring 2022
  */
 public class MainScreen {
-
-    /** Version number of the application */
-    //private final Settings myVersion;
 
     /** Layout used for the application */
     private final BorderPane borderPane;
@@ -84,8 +84,20 @@ public class MainScreen {
 
         //Set button actions here
         aboutButton.setOnAction(e -> versionBox());
-        saveButton.setOnAction(e -> Settings.saveSettings());
-        loadButton.setOnAction(e -> Settings.loadSettings());
+        saveButton.setOnAction(e -> {
+            try {
+                Settings.saveSettings();
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+        loadButton.setOnAction(e -> {
+            try {
+                Settings.loadSettings();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
         hBox.setSpacing(5);
         hBox.getChildren().addAll(aboutButton,saveButton,loadButton);

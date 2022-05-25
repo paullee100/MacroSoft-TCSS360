@@ -1,12 +1,12 @@
 /*
  *
  */
-package main;
+package main.data;
 
 /**
  * User class
  *
- * @author Gabe Bryan
+ * @author Gabriel Bryan
  * @version Spring 2022
  */
 public class User {
@@ -30,6 +30,10 @@ public class User {
         myName = name;
         myEmailAddress = email;
     }
+
+    public String getUserName(){ return myName;}
+
+    public String getEmailAddress() {return myEmailAddress;}
 
     /**
      * Overrides the toString method to print out the correct
