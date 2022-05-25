@@ -2,7 +2,7 @@ module MacroSoft.TCSS360 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-    requires junit;
+   // requires junit;
 
 //    requires org.controlsfx.controls;
 //    requires com.dlsc.formsfx;
