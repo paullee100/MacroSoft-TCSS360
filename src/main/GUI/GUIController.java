@@ -158,7 +158,7 @@ public class GUIController extends Application {
      * When a tab button is pressed, the tab will change.
      * @return a vertical box with buttons for changing tabs.
      */
-    public VBox tabChanger() {
+    private VBox tabChanger() {
         createTabs();
         VBox tabBar = new VBox();
         tabBar.setSpacing(10);
@@ -188,7 +188,8 @@ public class GUIController extends Application {
         for(int i = 0; i < tabs.length; i++){
             Tab currTab = tabs[i];
             currTab.getTabButton().setOnAction(e -> {
-                mainPane.setCenter(currTab.buildView(myStage));
+                Pane tabPane = currTab.buildView(myStage);
+                mainPane.setCenter(tabPane);
             });
         }
     }

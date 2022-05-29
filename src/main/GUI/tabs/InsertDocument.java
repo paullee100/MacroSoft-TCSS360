@@ -20,6 +20,8 @@ public class InsertDocument extends Tab {
 
     private static final double SCALE = 2.5;
 
+    private static final double FONT_SIZE = 16;
+
     private BorderPane borderPane;
     private GridPane gridPane;
 
@@ -45,8 +47,8 @@ public class InsertDocument extends Tab {
         super(buttonName, icon);
 
         //sets up the text
-        filePath = createText("FilePath");
-        obj = createText("Object");
+        filePath = createText("File Path");
+        obj = createText("Item");
         folder = createText("Folder");
         name = createText("Name");
 
@@ -59,7 +61,7 @@ public class InsertDocument extends Tab {
         //sets up the select button
         select = new Button("Select");
         select.getStyleClass().add("squircle-button");
-        select.setFont(new Font(16));
+        select.setFont(new Font(FONT_SIZE));
 
         //sets the image for the down arrows
         ImageView arrowIcon = new ImageView(new Image("/insert.png"));
@@ -76,7 +78,7 @@ public class InsertDocument extends Tab {
         insertDoc = new Button("Insert Document");
         insertDoc.setPrefSize(300 * SCALE, 25 * SCALE);
         insertDoc.getStyleClass().add("squircle-button");
-        insertDoc.setFont(new Font(16));
+        insertDoc.setFont(new Font(FONT_SIZE));
     }
 
     @Override
@@ -119,14 +121,14 @@ public class InsertDocument extends Tab {
         TextField theField = new TextField();
         theField.setMinSize(100 * SCALE, 25 * SCALE);
         theField.getStyleClass().add("custom-text-entry");
-        theField.setFont(new Font(16));
+        theField.setFont(new Font(FONT_SIZE));
         return theField;
     }
 
     private Text createText(String text) {
         Text theText = new Text(text);
         theText.getStyleClass().add("white-text");
-        theText.setFont(new Font(16));
+        theText.setFont(new Font(FONT_SIZE));
         return theText;
     }
 
@@ -156,7 +158,6 @@ public class InsertDocument extends Tab {
             borderPane.setVisible(false);
         });
         toolBar.getChildren().add(close);
-
 
         return toolBar;
     }
