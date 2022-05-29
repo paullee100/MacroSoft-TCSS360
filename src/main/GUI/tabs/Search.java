@@ -28,16 +28,15 @@ public class Search extends Tab {
 
     private static final int BUTTON_SIZE = 100;
 
-    private final BorderPane borderPane;
-    private final GridPane gridPane;
+    private BorderPane borderPane;
+    private GridPane gridPane;
     private final Text Searching;
     private final TextField SearchingBox;
     private final Button MagGlass;
     public Search(String buttonName, Image icon) {
 
         super(buttonName, icon);
-        borderPane = new BorderPane();
-        gridPane = new GridPane();
+
         Searching = new Text("Search");
         Searching.getStyleClass().add("white-text");
         SearchingBox = new TextField();
@@ -53,6 +52,9 @@ public class Search extends Tab {
 
     @Override
     public Pane buildView(Stage stage) {
+        borderPane = new BorderPane();
+        gridPane = new GridPane();
+
         gridPane.setMinSize(500,  250);
         gridPane.setHgap(5);
         gridPane.setVgap(5);
@@ -62,7 +64,7 @@ public class Search extends Tab {
         gridPane.add(SearchingBox, 1, 0);
         borderPane.setCenter(gridPane);
         borderPane.setMaxSize(500, 250);
-        borderPane.setTop(createToolBar());
+        //borderPane.setTop(createToolBar());
         return borderPane;
     }
 
