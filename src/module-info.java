@@ -2,6 +2,7 @@ module MacroSoft.TCSS360 {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
+    requires org.json;
 
     opens main.GUI to javafx.fxml;
     exports archive;
