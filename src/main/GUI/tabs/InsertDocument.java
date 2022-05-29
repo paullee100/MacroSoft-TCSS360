@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.GUI.Tab;
@@ -44,51 +45,38 @@ public class InsertDocument extends Tab {
         super(buttonName, icon);
 
         //sets up the text
-        filePath = new Text("FilePath");
-        filePath.getStyleClass().add("white-text");
-        obj = new Text("Object");
-        obj.getStyleClass().add("white-text");
-        folder = new Text("Folder");
-        folder.getStyleClass().add("white-text");
-        name = new Text("Name");
-        name.getStyleClass().add("white-text");
+        filePath = createText("FilePath");
+        obj = createText("Object");
+        folder = createText("Folder");
+        name = createText("Name");
 
         //sets up the text fields
-        filePathBox = new TextField();
-        filePathBox.setMinSize(100 * SCALE, 25 * SCALE);
-        filePathBox.getStyleClass().add("custom-text-entry");
-        objectBox = new TextField();
-        objectBox.setMinSize(100 * SCALE, 25 * SCALE);
-        objectBox.getStyleClass().add("custom-text-entry");
-        folderBox = new TextField();
-        folderBox.setMinSize(100 * SCALE, 25 * SCALE);
-        folderBox.getStyleClass().add("custom-text-entry");
-        nameBox = new TextField();
-        nameBox.setMinSize(100 * SCALE, 25 * SCALE);
-        nameBox.getStyleClass().add("custom-text-entry");
+        filePathBox = createField();
+        objectBox = createField();
+        folderBox = createField();
+        nameBox = createField();
 
-        //sets up the buttons
+        //sets up the select button
         select = new Button("Select");
         select.getStyleClass().add("squircle-button");
-        downArrow1 = new Button();
-        downArrow1.getStyleClass().add("transparent-square-button");
-        downArrow1.setScaleX(SCALE/2);
-        downArrow1.setScaleY(SCALE/2);
-        downArrow2 = new Button();
-        downArrow2.getStyleClass().add("transparent-square-button");
-        downArrow2.setScaleX(SCALE/2);
-        downArrow2.setScaleY(SCALE/2);
-        ImageView Arrowimage = new ImageView(new Image("/insert.png"));
-        ImageView Arrowimage2 = new ImageView(new Image("/insert.png"));
-        Arrowimage.setFitHeight(BUTTON_SIZE * .20);
-        Arrowimage.setFitWidth(BUTTON_SIZE * .40);
-        Arrowimage2.setFitHeight(BUTTON_SIZE * .20);
-        Arrowimage2.setFitWidth(BUTTON_SIZE * .40);
-        downArrow1.setGraphic(Arrowimage);
-        downArrow2.setGraphic(Arrowimage2);
+        select.setFont(new Font(16));
+
+        //sets the image for the down arrows
+        ImageView arrowIcon = new ImageView(new Image("/insert.png"));
+        arrowIcon.setFitHeight(BUTTON_SIZE * .20);
+        arrowIcon.setFitWidth(BUTTON_SIZE * .25);
+        ImageView arrowIcon2 = new ImageView(new Image("/insert.png"));
+        arrowIcon2.setFitHeight(BUTTON_SIZE * .20);
+        arrowIcon2.setFitWidth(BUTTON_SIZE * .25);
+        //sets up the down arrow buttons
+        downArrow2 = createIconButton(arrowIcon2, SCALE/2);
+        downArrow1 = createIconButton(arrowIcon, SCALE/2);
+
+        //sets up the insert document button
         insertDoc = new Button("Insert Document");
         insertDoc.setPrefSize(300 * SCALE, 25 * SCALE);
         insertDoc.getStyleClass().add("squircle-button");
+        insertDoc.setFont(new Font(16));
     }
 
     @Override
@@ -125,6 +113,32 @@ public class InsertDocument extends Tab {
         objectBox.clear();
         folderBox.clear();
         nameBox.clear();
+    }
+
+    private TextField createField() {
+        TextField theField = new TextField();
+        theField.setMinSize(100 * SCALE, 25 * SCALE);
+        theField.getStyleClass().add("custom-text-entry");
+        theField.setFont(new Font(16));
+        return theField;
+    }
+
+    private Text createText(String text) {
+        Text theText = new Text(text);
+        theText.getStyleClass().add("white-text");
+        theText.setFont(new Font(16));
+        return theText;
+    }
+
+    private Button createIconButton(ImageView icon, double scale) {
+        Button theButton = new Button();
+        theButton.getStyleClass().add("transparent-square-button");
+
+        theButton.setScaleX(scale);
+        theButton.setScaleY(scale);
+        theButton.setGraphic(icon);
+
+        return theButton;
     }
 
     private HBox createToolBar() {

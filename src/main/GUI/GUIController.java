@@ -29,7 +29,7 @@ import main.GUI.tabs.Search;
 public class GUIController extends Application {
 
     /** The width of the GUI */
-    public static final int WIDTH = 500;
+    public static final int WIDTH = 900;
 
     /** The height of the GUI */
     public static final int HEIGHT = 500;
@@ -53,6 +53,7 @@ public class GUIController extends Application {
      * in the LoginScreen class to check the credentials before
      * moving to the main screen.
      * @param stage to set the scene and to display the GUI to the user.
+     * @authors Gabe, Paul
      */
     @Override
     public void start(Stage stage) {
@@ -152,7 +153,6 @@ public class GUIController extends Application {
         return toolBar;
     }
 
-
     /**
      * This creates the tab changer that exists on the left side of the application.
      * When a tab button is pressed, the tab will change.
@@ -175,14 +175,6 @@ public class GUIController extends Application {
     }
 
     /**
-     * Main method to launch the GUI.
-     * @param args argument
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
      * This initializes the tabs and generates all their tab buttons.
      */
     private void createTabs() {
@@ -199,5 +191,13 @@ public class GUIController extends Application {
                 mainPane.setCenter(currTab.buildView(myStage));
             });
         }
+    }
+
+    /**
+     * Main method to launch the GUI.
+     * @param args argument
+     */
+    public static void main(String[] args) {
+        launch(args);
     }
 }
