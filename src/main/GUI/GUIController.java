@@ -175,14 +175,6 @@ public class GUIController extends Application {
     }
 
     /**
-     * Main method to launch the GUI.
-     * @param args argument
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
      * This initializes the tabs and generates all their tab buttons.
      */
     private void createTabs() {
@@ -196,8 +188,17 @@ public class GUIController extends Application {
         for(int i = 0; i < tabs.length; i++){
             Tab currTab = tabs[i];
             currTab.getTabButton().setOnAction(e -> {
-                mainPane.setCenter(currTab.buildView(myStage));
+                Pane tabPane = currTab.buildView(myStage);
+                mainPane.setCenter(tabPane);
             });
         }
+    }
+
+    /**
+     * Main method to launch the GUI.
+     * @param args argument
+     */
+    public static void main(String[] args) {
+        launch(args);
     }
 }
