@@ -52,8 +52,8 @@ public class Database {
         return getItem(name) != null;
     }
 
-    public ArrayList<Item> getItems() {
-        return (ArrayList<Item>)items.clone();
+    public Item[] getItems() {
+        return (Item[])items.toArray();
     }
 
     public JSONObject toJSONObject() {
@@ -67,10 +67,16 @@ public class Database {
     }
     public void save() throws IOException {
         File dir = new File(workingDir);
-        if (!dir.exists() || !dir.isDirectory())
+        if (!dir.exists() || !dir.isDirectory()) {
             dir.mkdir();
+        }
 
         File dbFile = new File(workingDir + "/database.json");
+        if (dbFile.exists()) {
+            System.out.println("dbFile exists");
+        }
+        else
+            System.out.println("dbFile does not exist");
 
         JSONObject json = toJSONObject();
 
@@ -79,6 +85,7 @@ public class Database {
         bw.write(json.toString());
         bw.close();
     }
+
 
 
 

@@ -50,8 +50,8 @@ public class Item {
         removeFile(getFile(name));
     }
 
-    public ArrayList<ItemFile> getFiles() {
-        return (ArrayList<ItemFile>)files.clone();
+    public ItemFile[] getFiles() {
+        return (ItemFile[])files.toArray();
     }
 
     public ItemFile getFile(String name) {
