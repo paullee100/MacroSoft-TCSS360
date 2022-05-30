@@ -7,6 +7,7 @@ import org.json.*;
 import java.io.*;
 
 public class Database {
+    public static Database db = null;
     private String workingDir;
     private ArrayList<Item> items;
 
