@@ -4,16 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import main.GUI.Tab;
+import main.data.Database;
 import main.data.Item;
 
 import java.util.ArrayList;
@@ -83,7 +83,19 @@ public class InsertDocument extends Tab {
         //sets up the text fields
         filePathBox = createField();
 
-        objectBox = createItemDropDown();
+        //sample items setup
+        String[] nameOfItem = {"DishWasher", "Wifi", "RentalDocuments", "SomeOtherGoodThings"};
+        // test for a simple item list
+        ArrayList<Item> items =  new ArrayList<Item>();
+        for(int i = 0; i < nameOfItem.length; i++){
+            Item temp = new Item(Database.db, nameOfItem[i]);
+            items.add(temp);
+        }
+
+        objectBox = createItemDropDown(items);
+        objectBox.setOnAction( e -> {
+            System.out.println(objectBox.getValue().getClass());
+        });
 
         nameBox = createField();
 
@@ -176,21 +188,16 @@ public class InsertDocument extends Tab {
         return toolBar;
     }
 
-    private ComboBox<Item> createItemDropDown(){
-        String[] nameOfItem = {"DishWasher", "Wifi", "RentalDocuments", "SomeOtherGoodThings"};
-        // test for a simple item list
-        ArrayList<Item> items =  new ArrayList<Item>();
-        for(int i = 0; i < nameOfItem.length; i++){
-            Item temp = new Item(nameOfItem[i]);
-            items.add(temp);
-        }
-        ObservableList<String> options = FXCollections.observableArrayList();
+    private ComboBox<Item> createItemDropDown(ArrayList<Item> items){
+
+        ObservableList<Item> options = FXCollections.observableArrayList();
         Iterator<Item> itr = items.iterator();
         while(itr.hasNext()){
-            options.add(itr.next().getName());
-
+            options.add(itr.next());
         }
         ComboBox temp = new ComboBox(options);
+        temp.getStyleClass().add("combo-box");
+
         temp.setMinSize(800, 60);
         return temp;
         
