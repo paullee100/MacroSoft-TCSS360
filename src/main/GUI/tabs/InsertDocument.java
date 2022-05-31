@@ -1,8 +1,11 @@
 package main.GUI.tabs;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,36 +14,62 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.GUI.Tab;
+import main.data.Item;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import static javafx.application.Application.launch;
 
+/**
+ * ItemController Class that will control the function of
+ * Inserting document, which is shown to the user when they
+ * click on the "insert" button on the left side of the
+ * program.
+ *
+ * @author Gabriel Bryan, Anteh Hsu
+ * @version Spring 2022
+ */
+
 public class InsertDocument extends Tab {
 
+    /**
+     * Default size of buttons
+     */
     private static final int BUTTON_SIZE = 100;
 
+    /**
+     * default scaling variables
+     */
     private static final double SCALE = 2.5;
 
+    /**
+     * default font size
+     */
     private static final double FONT_SIZE = 16;
 
+    /**
+     * Overall border pane of the GUI
+     */
     private BorderPane borderPane;
+
+    /**
+     * Grid pane that contains GUI elements
+     */
     private GridPane gridPane;
 
     /** Text */
     private final Text filePath;
     private final Text obj;
-    private final Text folder;
     private final Text name;
 
     /** Text fields */
     private final TextField filePathBox;
-    private final TextField objectBox;
-    private final TextField folderBox;
+    private final ComboBox objectBox;
     private final TextField nameBox;
 
     /** Buttons */
     private final Button select;
-    private final Button downArrow1;
-    private final Button downArrow2;
     private final Button insertDoc;
 
     public InsertDocument(String buttonName, Image icon) {
@@ -49,13 +78,13 @@ public class InsertDocument extends Tab {
         //sets up the text
         filePath = createText("File Path");
         obj = createText("Item");
-        folder = createText("Folder");
         name = createText("Name");
 
         //sets up the text fields
         filePathBox = createField();
-        objectBox = createField();
-        folderBox = createField();
+
+        objectBox = createItemDropDown();
+
         nameBox = createField();
 
         //sets up the select button
@@ -63,16 +92,7 @@ public class InsertDocument extends Tab {
         select.getStyleClass().add("squircle-button");
         select.setFont(new Font(FONT_SIZE));
 
-        //sets the image for the down arrows
-        ImageView arrowIcon = new ImageView(new Image("/insert.png"));
-        arrowIcon.setFitHeight(BUTTON_SIZE * .20);
-        arrowIcon.setFitWidth(BUTTON_SIZE * .25);
-        ImageView arrowIcon2 = new ImageView(new Image("/insert.png"));
-        arrowIcon2.setFitHeight(BUTTON_SIZE * .20);
-        arrowIcon2.setFitWidth(BUTTON_SIZE * .25);
-        //sets up the down arrow buttons
-        downArrow2 = createIconButton(arrowIcon2, SCALE/2);
-        downArrow1 = createIconButton(arrowIcon, SCALE/2);
+
 
         //sets up the insert document button
         insertDoc = new Button("Insert Document");
@@ -94,14 +114,10 @@ public class InsertDocument extends Tab {
         gridPane.setAlignment(Pos.CENTER);
         gridPane.add(filePath, 0, 0);
         gridPane.add(obj, 0, 1);
-        gridPane.add(folder, 0, 2);
         gridPane.add(name, 0, 3);
         gridPane.add(filePathBox, 1, 0);
         gridPane.add(objectBox, 1, 1);
-        gridPane.add(folderBox,1, 2);
         gridPane.add(nameBox, 1, 3);
-        gridPane.add(downArrow1, 2, 1);
-        gridPane.add(downArrow2, 2, 2);
         gridPane.add(insertDoc, 1, 4);
         gridPane.add(select, 2, 0);
         borderPane.setCenter(gridPane);
@@ -112,8 +128,6 @@ public class InsertDocument extends Tab {
 
     private void clearTextFields() {
         filePathBox.clear();
-        objectBox.clear();
-        folderBox.clear();
         nameBox.clear();
     }
 
@@ -160,6 +174,26 @@ public class InsertDocument extends Tab {
         toolBar.getChildren().add(close);
 
         return toolBar;
+    }
+
+    private ComboBox<Item> createItemDropDown(){
+        String[] nameOfItem = {"DishWasher", "Wifi", "RentalDocuments", "SomeOtherGoodThings"};
+        // test for a simple item list
+        ArrayList<Item> items =  new ArrayList<Item>();
+        for(int i = 0; i < nameOfItem.length; i++){
+            Item temp = new Item(nameOfItem[i]);
+            items.add(temp);
+        }
+        ObservableList<String> options = FXCollections.observableArrayList();
+        Iterator<Item> itr = items.iterator();
+        while(itr.hasNext()){
+            options.add(itr.next().getName());
+
+        }
+        ComboBox temp = new ComboBox(options);
+        temp.setMinSize(800, 60);
+        return temp;
+        
     }
 
 }
