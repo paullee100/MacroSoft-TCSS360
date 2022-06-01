@@ -1,10 +1,14 @@
 package main.data;
 
-import java.io.IOException;
-import java.util.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
 import java.io.File;
-import org.json.*;
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     public static Database db = null;
@@ -117,7 +121,7 @@ public class Database {
      * @return an array of items
      */
     public Item[] getItems() {
-        return (Item[])items.toArray();
+        return (Item[])items.toArray(new Item[items.size()]);
     }
 
     /*

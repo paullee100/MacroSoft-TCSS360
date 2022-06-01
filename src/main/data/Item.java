@@ -1,12 +1,14 @@
 package main.data;
 
+import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
-import org.json.*;
-import org.apache.commons.io.FilenameUtils;
+import java.util.ArrayList;
 
 public class Item {
     private Database database;
@@ -109,7 +111,7 @@ public class Item {
      * @return a ItemFile array of the files contained within the object
      */
     public ItemFile[] getFiles() {
-        return (ItemFile[])files.toArray();
+        return (ItemFile[])files.toArray(new ItemFile[files.size()]);
     }
 
     /**
