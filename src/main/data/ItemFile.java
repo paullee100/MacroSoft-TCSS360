@@ -71,4 +71,8 @@ public class ItemFile {
         return new JSONObject(map);
     }
 
+    public String toString(){
+        return fileName;
+    }
+
 }
