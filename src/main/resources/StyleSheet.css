@@ -63,3 +63,32 @@
 .toolbar {
     -fx-background-color: #1d1f29;
 }
+
+
+.combo-box .list-cell
+{
+    -fx-background: #1d1f29;
+    -fx-text-fill: rgb(200, 200, 200);
+}
+
+.combo-box .list-cell:hover
+{
+    -fx-background-color: #393d4f;
+}
+
+.combo-box .list-view .list-cell:filled:selected
+{
+    /*-fx-background: #1d1f29;*/
+    -fx-background-color: #494d5f;/*#3c4052;*/
+}
+
+.combo-box-popup .list-view
+{
+    -fx-background-color: black;/*#1d1f29;*/
+}
+
+.combo-box-base
+{
+    -fx-background-color: #393d4f;
+    -fx-text-fill: rgb(200, 200, 200);
+}
