@@ -181,7 +181,7 @@ public class InsertDocument extends Tab {
         // test for a simple item list
         ArrayList<Item> items =  new ArrayList<Item>();
         for(int i = 0; i < nameOfItem.length; i++){
-            Item temp = new Item(nameOfItem[i]);
+            Item temp = new Item(null, nameOfItem[i]);
             items.add(temp);
         }
         ObservableList<String> options = FXCollections.observableArrayList();
