@@ -3,10 +3,8 @@
  */
 package main.GUI;
 
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToolBar;
 import javafx.stage.StageStyle;
 import main.GUI.tabs.InsertDocument;
 import main.GUI.tabs.ItemController;
@@ -29,7 +27,7 @@ import main.GUI.tabs.Search;
 public class GUIController extends Application {
 
     /** The width of the GUI */
-    public static final int WIDTH = 900;
+    public static final int WIDTH = 700;
 
     /** The height of the GUI */
     public static final int HEIGHT = 500;
@@ -64,10 +62,12 @@ public class GUIController extends Application {
         loginScreen = new LoginScreen(this, myStage);
 
         stage.setTitle("IterationTwo");
-        Scene loginPage = new Scene(loginScreen.loginGUI(), WIDTH, HEIGHT);
-        loginPage.getStylesheets().add("/StyleSheet.css");
 
-        stage.setScene(loginPage);
+        WorkDirectoryChooser dc = new WorkDirectoryChooser(loginScreen, this, myStage);
+        Scene wdChooserPage = new Scene(dc.setUpGUI(), WIDTH, HEIGHT);
+        wdChooserPage.getStylesheets().add("/StyleSheet.css");
+
+        stage.setScene(wdChooserPage);
         stage.show();
 
     }
@@ -133,12 +133,12 @@ public class GUIController extends Application {
         toolBar.getChildren().add(min);
 
         //Creates the maximize button.
-        Button max = new Button(" o ");
+        /*Button max = new Button(" o ");
         max.getStyleClass().add("tool-bar-button");
         max.setOnAction(e -> {
             myStage.setMaximized(!myStage.isMaximized());
         });
-        toolBar.getChildren().add(max);
+        toolBar.getChildren().add(max);*/
 
         //Creates the close button
         Button close = new Button(" x ");
