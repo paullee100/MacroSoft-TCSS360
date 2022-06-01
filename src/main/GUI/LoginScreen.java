@@ -24,7 +24,11 @@ import main.data.User;
  */
 public class LoginScreen {
 
-    /**Layout for the application as a whole*/
+    /** Dimensions of stage */
+    private final double WIDTH = 500;
+    private final double HEIGHT = 500;
+
+    /** Layout for the application as a whole */
     private final BorderPane borderPane;
 
     /** Layout used for the application window */
@@ -88,6 +92,8 @@ public class LoginScreen {
      * @return the log in GUI.
      */
     public Pane loginGUI() {
+        myStage.setHeight(HEIGHT);
+        myStage.setWidth(WIDTH);
 
         //Sets the size, and spacing of the login page.
         gridPane.setMinSize(500,  500);
