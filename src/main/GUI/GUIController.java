@@ -16,6 +16,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.GUI.tabs.Search;
+import main.data.Database;
+import main.data.Item;
+import main.data.ItemFile;
+
+import java.awt.image.DataBuffer;
 
 /**
  * Controller of the GUI to call other class's method that would
@@ -91,6 +96,7 @@ public class GUIController extends Application {
 
         //Sets up the toolbar
         mainPane.setTop(createToolBar());
+        //testItemDisplay();
     }
 
     /**
@@ -200,5 +206,13 @@ public class GUIController extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void testItemDisplay(){
+        Item item = new Item(Database.db, "A file");
+        ItemFile file = new ItemFile("Peer Review", "C:\\Users\\gaber\\OneDrive\\Documents\\Peer Review.docx");
+        item.addFile(file);
+        ItemDisplay newItemDisplay =  new ItemDisplay(myStage);
+        mainPane.setCenter(newItemDisplay.buildView(item));
     }
 }
