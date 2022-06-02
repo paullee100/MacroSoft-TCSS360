@@ -174,7 +174,7 @@ public class Database {
             dir.mkdir();
         }
 
-        File dbFile = new File(workingDir + "database.json");
+        File dbFile = new File(workingDir + "/database.json");
 
         JSONObject json = toJSONObject();
 

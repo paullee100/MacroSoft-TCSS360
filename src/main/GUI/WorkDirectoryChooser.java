@@ -14,8 +14,13 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import main.data.Database;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
 
 /**
  * Picks a working directory to use for the database.
@@ -111,8 +116,23 @@ public class WorkDirectoryChooser {
         //When the confirm button is clicked, we check to see
         //if the directory is valid or display an error message.
         confirmButton.setOnAction(clickEvent -> {
-            Database.db = new Database(directoryInput.getText());
             if(verifyDirectory()){
+                File jsonFile = new File(myFile.getPath() + "/database.json");
+                System.out.println(jsonFile.getPath());
+                if(jsonFile.exists()) {
+                    try {
+                        FileReader jsonReader = new FileReader(jsonFile);
+                        JSONTokener tokener = new JSONTokener(jsonReader);
+                        System.out.println("Found JSON");
+                        JSONObject theJSON = new JSONObject(tokener);
+                        Database.db = new Database(theJSON);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    Database.db = new Database(myFile.getPath());
+                }
                 promptLogin();
             } else{
                 myErrorDisplay.setText("Error, invalid directory. Please try again.");
