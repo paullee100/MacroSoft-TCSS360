@@ -5,6 +5,8 @@ package main.GUI;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.stage.StageStyle;
 import main.GUI.tabs.InsertDocument;
 import main.GUI.tabs.ItemController;
@@ -21,6 +23,7 @@ import main.data.Item;
 import main.data.ItemFile;
 
 import java.awt.image.DataBuffer;
+import java.io.IOException;
 
 /**
  * Controller of the GUI to call other class's method that would
@@ -166,6 +169,7 @@ public class GUIController extends Application {
      */
     private VBox tabChanger() {
         createTabs();
+
         VBox tabBar = new VBox();
         tabBar.setSpacing(10);
 
@@ -173,6 +177,8 @@ public class GUIController extends Application {
         for(Tab aTab: tabs) {
             tabBar.getChildren().add(aTab.getTabButton());
         }
+        //Adds the save button
+        tabBar.getChildren().add(createSaveTab(Tab.BUTTON_SIZE));
 
         Background background = new Background(new BackgroundFill(Color.rgb(40, 43, 56), CornerRadii.EMPTY, Insets.EMPTY));
         tabBar.setBackground(background);
@@ -198,6 +204,31 @@ public class GUIController extends Application {
                 mainPane.setCenter(tabPane);
             });
         }
+    }
+
+    private Button createSaveTab(double buttonSize){
+        Image icon = new Image("/save.png");
+
+        Button tabButton = new Button();
+        tabButton.getStyleClass().add("transparent-square-button");
+        tabButton.setPrefSize(buttonSize, buttonSize);
+        tabButton.setTooltip(new Tooltip("Save"));
+
+        ImageView iconView = new ImageView(icon);
+        iconView.setFitHeight(buttonSize * .8);
+        iconView.setFitWidth(buttonSize * .8);
+        tabButton.setGraphic(iconView);
+
+        tabButton.setOnAction(clickEvent -> {
+            try {
+                Database.db.save();
+                Database.db.cacheAllFiles();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return tabButton;
     }
 
     /**
