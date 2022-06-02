@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.GUI.Tab;
@@ -88,6 +89,8 @@ public class InsertDocument extends Tab {
 
     private final Text errormsg;
 
+    private final Text SuccessMsg;
+
 
     public InsertDocument(String buttonName, Image icon) {
         super(buttonName, icon);
@@ -132,6 +135,9 @@ public class InsertDocument extends Tab {
         errormsg = new Text("All fields need to be filled before inserting!");
         errormsg.setFill(Color.RED);
         errormsg.setVisible(false);
+        SuccessMsg = new Text("Successfully inserting Document.");
+        SuccessMsg.setFill(Color.GREEN);
+        SuccessMsg.setVisible(false);
     }
 
     @Override
@@ -154,6 +160,7 @@ public class InsertDocument extends Tab {
         gridPane.add(insertDoc, 1, 4);
         gridPane.add(select, 2, 0);
         gridPane.add(errormsg, 1, 5);
+        gridPane.add(SuccessMsg,1,5);
         borderPane.setCenter(gridPane);
         //borderPane.setMaxSize(500, 250);
         //borderPane.setTop(createToolBar());
@@ -229,30 +236,42 @@ public class InsertDocument extends Tab {
 
         select.setOnAction(e -> {
             Stage temp = new Stage();
-            DirectoryChooser chooser = new DirectoryChooser();
-            myFile = chooser.showDialog(temp);
-            if(myFile != null){
+            FileChooser chooser = new FileChooser();
+            myFile = chooser.showOpenDialog(temp);
+            if(myFile.exists() && myFile.isFile()){
+                errormsg.setVisible(false);
                 filePathBox.setText(myFile.getPath());
                 System.out.println(filePathBox.getText());
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea("inValid file path!")));
-                alert.showAndWait();
+                errormsg.setText("Invalid file path or File does not exist!");
+                errormsg.setVisible(true);
             }
 
             }
         );
 
         insertDoc.setOnAction(e -> {
-            if(filePathBox.getText().equals("") || objectBox.getValue() == null || nameBox.getText().equals("")){
+            myFile = new File(filePathBox.getText());
+            if(!myFile.exists()){
+                errormsg.setText("File does not exist!");
+                SuccessMsg.setVisible(false);
+                errormsg.setVisible(true);
+            }
+            else if(filePathBox.getText().equals("") || objectBox.getValue() == null || nameBox.getText().equals("")){
+                SuccessMsg.setVisible(false);
                 errormsg.setVisible(true);
             } else{
                 errormsg.setVisible(false);
+                errormsg.setText("All fields need to be filled before inserting!");
                 pathStr = filePathBox.getText();
                 selectItem = (Item) objectBox.getValue();
                 nameStr = nameBox.getText();
                 ItemFile doc = new ItemFile(nameStr, pathStr);
                 selectItem.addFile(doc);
+                SuccessMsg.setVisible(true);
+                objectBox.setValue(null);
+                System.out.println(Database.db.getItems());
+                
             }
 
             }
