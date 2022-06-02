@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -131,13 +132,18 @@ public class InsertDocument extends Tab {
         insertDoc.setPrefSize(300 * SCALE, 25 * SCALE);
         insertDoc.getStyleClass().add("squircle-button");
         insertDoc.setFont(new Font(FONT_SIZE));
-        addButtonListener();
+        Font font = Font.font("Verdana", FontWeight.BOLD, 25);
         errormsg = new Text("All fields need to be filled before inserting!");
         errormsg.setFill(Color.RED);
         errormsg.setVisible(false);
+        errormsg.setFont(font);
         SuccessMsg = new Text("Successfully inserting Document.");
         SuccessMsg.setFill(Color.GREEN);
         SuccessMsg.setVisible(false);
+        SuccessMsg.setFont(font);
+        addButtonListener();
+
+
     }
 
     @Override
@@ -268,9 +274,11 @@ public class InsertDocument extends Tab {
                 nameStr = nameBox.getText();
                 ItemFile doc = new ItemFile(nameStr, pathStr);
                 selectItem.addFile(doc);
+                SuccessMsg.setText("Inserting Successful! The File " + doc.getName() + " is now under item " + selectItem.getName() + "!");
                 SuccessMsg.setVisible(true);
                 objectBox.setValue(null);
-                System.out.println(Database.db.getItems());
+
+
                 
             }
 
