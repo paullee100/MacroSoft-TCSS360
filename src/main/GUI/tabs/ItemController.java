@@ -5,17 +5,16 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.GUI.ItemDisplay;
 import main.GUI.Tab;
 import main.data.Database;
+import main.data.ItemFile;
 
 /**
  * ItemController Class that will control the items,
@@ -31,12 +30,22 @@ public class ItemController extends Tab {
     /** Sets the size of the button */
     private static final int BUTTON_SIZE = 100;
 
- //   private Database myDataBase;
+    /** When a certain action requires user input/confirmation */
+    private Alert alert;
 
+    /** Pane for the buttons to be in */
+    private BorderPane buttonPane;
+
+    /** The numbers of buttons for the item(s) */
     private Button[] itemButtons;
 
-    private BorderPane borderPane;
+    /** The button that deletes an item */
+    private Button deleteButton;
 
+    /** The button that creates an item */
+    private Button createButton;
+
+    /** The text that appears on top of the borderpane */
     private Text titleText;
 
     /**
@@ -48,11 +57,20 @@ public class ItemController extends Tab {
     public ItemController(String buttonName, Image icon) {
         super(buttonName, icon);
         Database.db.createItem("TV");
-        Database.db.createItem("Remote");
+        Database.db.createItem("Computers");
 
-        for (int i = 0; i < 7; i++) {
-            Database.db.createItem("Example" + i);
-        }
+        // Itemfiles are for demonstration purposes only to showcase how the application works.
+        ItemFile itemFile = new ItemFile("Samsung TV Manual", Database.db.getWorkingDirectory() + "\\SamsungTVManual.pdf");
+        ItemFile itemFile2 = new ItemFile("Samsung LED TV Manual", Database.db.getWorkingDirectory() + "\\SamsungLEDTVManual.pdf");
+
+        ItemFile itemFile3 = new ItemFile("Apple II Manual", Database.db.getWorkingDirectory() + "\\AppleIIManual.pdf");
+        ItemFile itemFile4 = new ItemFile("Windows 95 Manual", Database.db.getWorkingDirectory() + "\\Windows 95 Manual.pdf");
+
+        Database.db.getItems()[0].addFile(itemFile);
+        Database.db.getItems()[0].addFile(itemFile2);
+
+        Database.db.getItems()[1].addFile(itemFile3);
+        Database.db.getItems()[1].addFile(itemFile4);
     }
 
     /**
@@ -65,77 +83,76 @@ public class ItemController extends Tab {
      */
     @Override
     public Pane buildView(Stage stage) {
-        titleText = new Text("MacroSoft360's Program");
-        titleText.setFill(Color.WHITE);
+        // Added spaces in the titleText to appear correctly in the GUI.
+        titleText = new Text("MacroSoft360's Program                              ");
+        titleText.getStyleClass().add("white-text");
         titleText.setFont(Font.font("verdana", FontWeight.BOLD, 50));
-        borderPane = new BorderPane();
-        HBox hBox = new HBox();
-        hBox.getStyleClass().add("toolbar");
-        hBox.setSpacing(10);
-        hBox.setPadding(new Insets(5));
 
-        Button delete = new Button();
-        createButton(delete, "Delete", "/deleteIcon.png");
-        delete.setOnAction(e -> delete()); // Dummy call
+        buttonPane = new BorderPane();
+        HBox topBar = new HBox();
+        topBar.setSpacing(10);
+        topBar.setPadding(new Insets(5));
 
-        Button createItem = new Button();
-        createButton(createItem, "Create", "/createItemIcon.png");
-        createItem.setOnAction(e -> create()); // Dummy call
+        Background background = new Background(new BackgroundFill(Color.rgb(40,43,56), CornerRadii.EMPTY, Insets.EMPTY));
+        topBar.setBackground(background);
 
-        hBox.getChildren().addAll(titleText, delete, createItem);
-        borderPane.setTop(hBox);
-        createItemGUI(borderPane);
-        hBox.setAlignment(Pos.CENTER_RIGHT);
+        deleteButton = createButton("Delete", "/deleteIcon.png");
+        deleteButton.setOnAction(e -> deleteAItem(stage));
 
-        return borderPane;
+        createButton = createButton("Create", "/createItemIcon.png");
+        createButton.setOnAction(e -> createAItem(stage));
+
+        topBar.getChildren().addAll(titleText, deleteButton, createButton);
+        buttonPane.setTop(topBar);
+        createItemGUI(buttonPane);
+        topBar.setAlignment(Pos.CENTER_RIGHT);
+
+        testItemDisplay(stage);
+
+        return buttonPane;
     }
 
-    private ScrollPane createScrollPane() {
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(500, 500);
-        scrollPane.getStylesheets().add("/Stylesheet.css");
-
-        return scrollPane;
+    /**
+     * A demonstration of how looking inside the item would look like.
+     *
+     * @param stage the stage to be changed to display the files.
+     */
+    private void testItemDisplay(Stage stage) {
+        ItemDisplay newItemDisplay = new ItemDisplay(stage);
+        itemButtons[0].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[0])));
+        itemButtons[1].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[1])));
     }
+
     /**
      * Creates each of the button of the GUI.
      *
-     * @param button the button to adjust the size and to place a graphic.
-     * @param name the name of the button.
+     * @param buttonName the name of the button.
      * @param imagePath the path of the image to use.
      * @return a completed sized and graphic button.
      */
-    private Button createButton(Button button, String name, String imagePath) {
-        button.getStyleClass().add("squircle-button");
-        button.getStyleClass().add("transparent-square-button");
-        button.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
-        button.setTooltip(new Tooltip(name));
-        button.setGraphic(addGraphic(new Image(imagePath)));
-        return button;
-    }
+    private Button createButton(String buttonName, String imagePath) {
+        Button topButton = new Button();
+        topButton.getStyleClass().add("transparent-square-button");
+        topButton.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
+        topButton.setTooltip(new Tooltip(buttonName));
 
-    /**
-     * Sets up the image to be applied to the button.
-     *
-     * @param icon the image to be applied.
-     * @return the image ready to be applied to a button.
-     */
-    private ImageView addGraphic(Image icon) {
-        ImageView iconView = new ImageView(icon);
+        ImageView iconView = new ImageView(new Image(imagePath));
         iconView.setFitHeight(BUTTON_SIZE * .65);
         iconView.setFitWidth(BUTTON_SIZE * .65);
+        topButton.setGraphic(iconView);
 
-        return iconView;
+        return topButton;
     }
 
     /**
      * Creates and sets up the GUI for the items, which would be placed
-     * in the center of the GUI.
+     * in the center of the GUI. The items are placed inside a scroll pane
+     * so that if there are too many items to fit into one screen, the user
+     * can scroll up and down for the other items.
      *
      * @param borderPane to place the buttons on.
-     * @return the BorderPane of buttons.
      */
-    private Pane createItemGUI(BorderPane borderPane) {
+    private void createItemGUI(BorderPane borderPane) {
         itemButtons = new Button[Database.db.getItems().length];
         int row = 0; // Keeps track of which row the buttons will appear on.
         int column = 0; // Keeps track of which column the buttons will appear on.
@@ -146,6 +163,8 @@ public class ItemController extends Tab {
         paneOfItems.setVgap(10);
         for (int i = 0; i < Database.db.getItems().length; i++) {
             itemButtons[i] = new Button(Database.db.getItems()[i].getName());
+            itemButtons[i] = createButton(Database.db.getItems()[i].getName(), "/folderIcon.png");
+            itemButtons[i].setText(Database.db.getItems()[i].getName());
             itemButtons[i].setPrefSize(BUTTON_SIZE + 0.5 * BUTTON_SIZE, BUTTON_SIZE + 0.5 * BUTTON_SIZE);
             if (i % 8 == 0) {
                 row++; // If there are 8 buttons on a single row, move to next row.
@@ -153,50 +172,114 @@ public class ItemController extends Tab {
             }
             paneOfItems.add(itemButtons[i], column++, row);
         }
-        createScrollPane().setContent(paneOfItems);
-        borderPane.setCenter(paneOfItems);
-        return borderPane;
+
+        // Items are placed in a scroll pane and the user can scroll through the items
+        // if there are many items. This is to prevent the items to be squished together.
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefSize(scrollPane.getWidth(), 12000); // 12000 is an arbitrary number.
+        scrollPane.setPannable(true);
+        scrollPane.getStyleClass().add("scroll-pane");
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Only wants the user to scroll up and down.
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Scroll bar will only appear if there are
+
+        scrollPane.setContent(paneOfItems);
+        borderPane.setCenter(scrollPane);
     }
 
     /**
      * Method to allow the user to delete an item
      */
-    private void delete() {
-        Alert confirmToDelete = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmToDelete.setTitle("Confirmation");
-        ButtonType confirmButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-
-        titleText.setText("Click on an item to delete.");
+    private void deleteAItem(Stage stage) {
+        // Added spaces in the titleText to appear correctly in the GUI.
+        titleText.setText("Select an item to delete:                              ");
         for (int i = 0; i < Database.db.getItems().length; i++) {
-            int index = i; // index is needed since I can't place "i" inside the lambda expression
+            int index = i; // index is needed since "i" can't be used inside the lambda expression
                            // Since it has to be a final or effectively final variable to work.
-            itemButtons[i].setOnAction(e -> {
-                Database.db.removeItem(index);
-                createItemGUI(borderPane); // Calls back to update the GUI.
-                titleText.setText("MacroSoft360's Program");
-            });
+            itemButtons[i].setOnAction(e -> confirmToDelete(index, stage));
         }
+    }
+
+    /**
+     * When the user clicks on an item to delete, they will be
+     * prompt to confirm their delete.
+     * Yes indicates deleting the item
+     * No indicates that no item will be deleted.
+     *
+     * @param index the index of the item in the arraylist.
+     */
+    private void confirmToDelete(int index, Stage stage) {
+        BorderPane alertBox = new BorderPane();
+
+        Text confirm = new Text("Are you sure you want to delete " + Database.db.getItems()[index].getName() + "?");
+        confirm.getStyleClass().add("white-text");
+
+        alertBox.setCenter(confirm);
+
+        alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("Confirmation");
+        alert.getDialogPane().getStylesheets().add("/Stylesheet.css");
+        alert.getDialogPane().setContent(alertBox);
+
+        ButtonType confirmButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getDialogPane().getButtonTypes().add(confirmButton);
+        alert.getDialogPane().getButtonTypes().add(noButton);
+
+        alert.showAndWait().ifPresent(type -> {
+            if (type == confirmButton) {
+                Database.db.removeItem(index);
+                createItemGUI(buttonPane); // Calls back to update the GUI.
+                // Added spaces in the titleText to appear correctly in the GUI.
+                titleText.setText("MacroSoft360's Program                              ");
+            } else {
+                // User selected the "no" button.
+                // Added spaces in the titleText to appear correctly in the GUI.
+                titleText.setText("MacroSoft360's Program                              ");
+            }
+        });
     }
 
     /**
      * Method to allow the user to create a new item.
      * Duplicate names are not allowed.
      */
-    private void create() {
-        Alert alert = new Alert(Alert.AlertType.NONE);
+    private void createAItem(Stage stage) {
+        // Added spaces in the titleText to appear correctly in the GUI.
+        titleText.setText("Creating an item...                                               ");
+
+        Text dupeDisplay = new Text();
+        dupeDisplay.setFill(Color.RED);
+
+        Text itemNameText = new Text("Type a name for the item: ");
+        itemNameText.getStyleClass().add("white-text");
+
+        TextField userInputName = new TextField();
+        userInputName.getStyleClass().add("custom-text-entry");
+
+        GridPane alertPane = new GridPane(); // GridPane to be used in the alert box
+        alertPane.add(itemNameText, 0, 0);
+        alertPane.add(userInputName, 0, 1);
+        alertPane.add(dupeDisplay, 0, 2);
+
+        createItemAlertBox(dupeDisplay, userInputName, alertPane);
+
+    }
+
+    /**
+     * Alert box for when the user is creating an item.
+     *
+     * @param invalidName text that appears when the user inputs an item name that already exists.
+     * @param userInputName text that displays to the user to input the name of the item.
+     * @param alertPane the pane for the alert box.
+     */
+    private void createItemAlertBox(Text invalidName, TextField userInputName, GridPane alertPane) {
+        alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Create Item");
         alert.getDialogPane().getStylesheets().add("/Stylesheet.css");
-        titleText.setText("Creating an item...");
 
-        GridPane gridPane = new GridPane();
-
-        Text text = new Text("Item Name: ");
-        TextField textField = new TextField();
-        gridPane.add(text, 0, 0);
-        gridPane.add(textField, 0, 1);
-
-        alert.getDialogPane().setContent(gridPane);
+        alert.getDialogPane().setContent(alertPane);
         ButtonType confirm = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
@@ -204,14 +287,58 @@ public class ItemController extends Tab {
         alert.getDialogPane().getButtonTypes().add(cancel);
 
         alert.showAndWait().ifPresent(type -> {
+            while (checkNameDupe(userInputName.getText())) {
+                invalidName.setText("Item with same name already exists");
+                alert.showAndWait();
+
+                if (type == cancel) {
+                    // Added spaces in the titleText to appear correctly in the GUI.
+                    titleText.setText("MacroSoft360's Program                              ");
+                    return;
+                }
+            }
+
             if (type == confirm) {
-                Database.db.createItem(textField.getText());
-                createItemGUI(borderPane);
-                titleText.setText("MacroSoft360's Program");
+                Database.db.createItem(userInputName.getText());
+                createItemGUI(buttonPane);
+                // Added spaces in the titleText to appear correctly in the GUI.
+                titleText.setText("MacroSoft360's Program                              ");
             } else {
-                titleText.setText("MacroSoft360's Program");
-                return; // The user clicked on the cancel button, so no items are deleted.
+                // The user selected the cancel button, so no items are deleted.
+                // Added spaces in the titleText to appear correctly in the GUI.
+                titleText.setText("MacroSoft360's Program                              ");
             }
         });
+    }
+
+    /**
+     * Used as part of the createAItem method to check if there are
+     * already an item with that name in the Database. If so, this method
+     * will return true indicating that the name already exists in the Database,
+     * false otherwise.
+     *
+     * @return true if name already exists, false otherwise.
+     */
+    private boolean checkNameDupe(String newItemName) {
+        return Database.db.hasItem(newItemName);
+    }
+
+    private HBox createToolBar(String theTitle) {
+        HBox toolBar = new HBox();
+        Text title = new Text(theTitle);
+        title.setX(0);
+
+        toolBar.getChildren().add(title);
+
+        toolBar.getStyleClass().add("toolbar");
+        toolBar.setAlignment(Pos.CENTER_RIGHT);
+        toolBar.setSpacing(10);
+        toolBar.setPadding(new Insets(5));
+
+        Button close = new Button(" x ");
+        close.getStyleClass().add("close-button");
+        close.setOnAction(e -> alert.close());
+
+        return toolBar;
     }
 }
