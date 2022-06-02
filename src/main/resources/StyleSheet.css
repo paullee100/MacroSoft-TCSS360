@@ -92,3 +92,13 @@
     -fx-background-color: #393d4f;
     -fx-text-fill: rgb(200, 200, 200);
 }
+
+.scroll-pane > .viewport
+{
+    -fx-background-color: transparent;
+}
+
+.scroll-pane
+{
+    -fx-background-color: #1b1b26;
+}
