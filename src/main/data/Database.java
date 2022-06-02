@@ -55,7 +55,7 @@ public class Database {
         return workingDir;
     }
 
-    /*
+    /**
      * Adds an item to the database
      *
      * @param item the item that is being added
@@ -87,6 +87,32 @@ public class Database {
         Item item = new Item(this, json);
         addItem(item);
         return item;
+    }
+
+    /**
+     * Removes an item in the database
+     *
+     * @param index the index of the item to be removed.
+     * @throws IllegalArgumentException if the item does not exist.
+     */
+    private void deleteItem(int index) throws IllegalArgumentException {
+//        if (!hasItem(item.getName())) {
+//            throw new IllegalArgumentException("Item with this name does not exist");
+//        }
+        if (index >= items.size() || index < 0) {
+            throw new IllegalArgumentException("Item does not exist");
+        }
+
+        items.remove(index);
+    }
+
+    /**
+     * Removes an item
+     *
+     * @param index index of the arraylist to be removed
+     */
+    public void removeItem(int index) {
+        deleteItem(index);
     }
 
     /*

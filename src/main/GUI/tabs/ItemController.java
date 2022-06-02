@@ -2,16 +2,20 @@ package main.GUI.tabs;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.GUI.Tab;
+import main.data.Database;
 
 /**
  * ItemController Class that will control the items,
@@ -27,13 +31,28 @@ public class ItemController extends Tab {
     /** Sets the size of the button */
     private static final int BUTTON_SIZE = 100;
 
+ //   private Database myDataBase;
+
+    private Button[] itemButtons;
+
+    private BorderPane borderPane;
+
+    private Text titleText;
+
     /**
      * Constructor that calls the super method from the tabs class.
+     *
      * @param buttonName name of the button.
      * @param icon image of the button.
      */
     public ItemController(String buttonName, Image icon) {
         super(buttonName, icon);
+        Database.db.createItem("TV");
+        Database.db.createItem("Remote");
+
+        for (int i = 0; i < 7; i++) {
+            Database.db.createItem("Example" + i);
+        }
     }
 
     /**
@@ -46,43 +65,61 @@ public class ItemController extends Tab {
      */
     @Override
     public Pane buildView(Stage stage) {
-        BorderPane borderPane = new BorderPane();
+        titleText = new Text("MacroSoft360's Program");
+        titleText.setFill(Color.WHITE);
+        titleText.setFont(Font.font("verdana", FontWeight.BOLD, 50));
+        borderPane = new BorderPane();
         HBox hBox = new HBox();
         hBox.getStyleClass().add("toolbar");
         hBox.setSpacing(10);
         hBox.setPadding(new Insets(5));
 
-        Button filter = new Button();
-        filter.getStyleClass().add("transparent-square-button");
-        filter.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
-        filter.setTooltip(new Tooltip("Filter"));
-        filter.setGraphic(addGraphic(new Image("/filterIcon.png")));
-        filter.setOnAction(e -> filter()); // Dummy call
-
         Button delete = new Button();
-        delete.getStyleClass().add("transparent-square-button");
-        delete.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
-        delete.setTooltip(new Tooltip("Delete"));
-        delete.setGraphic(addGraphic(new Image("/deleteIcon.png")));
+        createButton(delete, "Delete", "/deleteIcon.png");
         delete.setOnAction(e -> delete()); // Dummy call
 
         Button createItem = new Button();
-        createItem.getStyleClass().add("transparent-square-button");
-        createItem.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
-        createItem.setTooltip(new Tooltip("Delete"));
-        createItem.setGraphic(addGraphic(new Image("/createItemIcon.png")));
+        createButton(createItem, "Create", "/createItemIcon.png");
         createItem.setOnAction(e -> create()); // Dummy call
 
-        hBox.getChildren().addAll(filter, delete, createItem);
-
+        hBox.getChildren().addAll(titleText, delete, createItem);
         borderPane.setTop(hBox);
-        borderPane.setCenter(itemsGUI());
+        createItemGUI(borderPane);
         hBox.setAlignment(Pos.CENTER_RIGHT);
-
 
         return borderPane;
     }
 
+    private ScrollPane createScrollPane() {
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setPrefSize(500, 500);
+        scrollPane.getStylesheets().add("/Stylesheet.css");
+
+        return scrollPane;
+    }
+    /**
+     * Creates each of the button of the GUI.
+     *
+     * @param button the button to adjust the size and to place a graphic.
+     * @param name the name of the button.
+     * @param imagePath the path of the image to use.
+     * @return a completed sized and graphic button.
+     */
+    private Button createButton(Button button, String name, String imagePath) {
+        button.getStyleClass().add("squircle-button");
+        button.getStyleClass().add("transparent-square-button");
+        button.setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
+        button.setTooltip(new Tooltip(name));
+        button.setGraphic(addGraphic(new Image(imagePath)));
+        return button;
+    }
+
+    /**
+     * Sets up the image to be applied to the button.
+     *
+     * @param icon the image to be applied.
+     * @return the image ready to be applied to a button.
+     */
     private ImageView addGraphic(Image icon) {
         ImageView iconView = new ImageView(icon);
         iconView.setFitHeight(BUTTON_SIZE * .65);
@@ -92,48 +129,89 @@ public class ItemController extends Tab {
     }
 
     /**
-     * A sample of how the GUI would look with items.
+     * Creates and sets up the GUI for the items, which would be placed
+     * in the center of the GUI.
      *
-     * @return GridPane of the items
+     * @param borderPane to place the buttons on.
+     * @return the BorderPane of buttons.
      */
-    private Pane itemsGUI() {
-        Button[] butt = new Button[5];
-        GridPane gridPane = new GridPane();
+    private Pane createItemGUI(BorderPane borderPane) {
+        itemButtons = new Button[Database.db.getItems().length];
+        int row = 0; // Keeps track of which row the buttons will appear on.
+        int column = 0; // Keeps track of which column the buttons will appear on.
 
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-
-        for (int i = 0; i < butt.length; i++) {
-            butt[i] = new Button("Button " + i);
-            butt[i].setPrefSize(BUTTON_SIZE, BUTTON_SIZE);
-            gridPane.add(butt[i], i, 0);
+        GridPane paneOfItems = new GridPane();
+        paneOfItems.setPadding(new Insets(10));
+        paneOfItems.setHgap(10);
+        paneOfItems.setVgap(10);
+        for (int i = 0; i < Database.db.getItems().length; i++) {
+            itemButtons[i] = new Button(Database.db.getItems()[i].getName());
+            itemButtons[i].setPrefSize(BUTTON_SIZE + 0.5 * BUTTON_SIZE, BUTTON_SIZE + 0.5 * BUTTON_SIZE);
+            if (i % 8 == 0) {
+                row++; // If there are 8 buttons on a single row, move to next row.
+                column = 0; // The column will start at the start in the new row.
+            }
+            paneOfItems.add(itemButtons[i], column++, row);
         }
-
-        return gridPane;
+        createScrollPane().setContent(paneOfItems);
+        borderPane.setCenter(paneOfItems);
+        return borderPane;
     }
 
     /**
-     * For future implementation of the filter button.
-     */
-    private void filter() {
-        System.out.println("Filter");
-        return;
-    }
-
-    /**
-     * For future implementation of the delete button.
+     * Method to allow the user to delete an item
      */
     private void delete() {
-        System.out.println("Delete");
-        return;
+        Alert confirmToDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmToDelete.setTitle("Confirmation");
+        ButtonType confirmButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+
+        titleText.setText("Click on an item to delete.");
+        for (int i = 0; i < Database.db.getItems().length; i++) {
+            int index = i; // index is needed since I can't place "i" inside the lambda expression
+                           // Since it has to be a final or effectively final variable to work.
+            itemButtons[i].setOnAction(e -> {
+                Database.db.removeItem(index);
+                createItemGUI(borderPane); // Calls back to update the GUI.
+                titleText.setText("MacroSoft360's Program");
+            });
+        }
     }
 
     /**
-     * For future implementation of the create button.
+     * Method to allow the user to create a new item.
+     * Duplicate names are not allowed.
      */
     private void create() {
-        System.out.println("Create");
-        return;
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("Create Item");
+        alert.getDialogPane().getStylesheets().add("/Stylesheet.css");
+        titleText.setText("Creating an item...");
+
+        GridPane gridPane = new GridPane();
+
+        Text text = new Text("Item Name: ");
+        TextField textField = new TextField();
+        gridPane.add(text, 0, 0);
+        gridPane.add(textField, 0, 1);
+
+        alert.getDialogPane().setContent(gridPane);
+        ButtonType confirm = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getDialogPane().getButtonTypes().add(confirm);
+        alert.getDialogPane().getButtonTypes().add(cancel);
+
+        alert.showAndWait().ifPresent(type -> {
+            if (type == confirm) {
+                Database.db.createItem(textField.getText());
+                createItemGUI(borderPane);
+                titleText.setText("MacroSoft360's Program");
+            } else {
+                titleText.setText("MacroSoft360's Program");
+                return; // The user clicked on the cancel button, so no items are deleted.
+            }
+        });
     }
 }
