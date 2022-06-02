@@ -4,18 +4,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.GUI.Tab;
 import main.data.Database;
 import main.data.Item;
+import main.data.ItemFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -72,6 +77,18 @@ public class InsertDocument extends Tab {
     private final Button select;
     private final Button insertDoc;
 
+    /** String for filepath, item and name */
+    private String pathStr = "";
+
+    private Item selectItem = null;
+
+    private String nameStr = "";
+
+    private File myFile;
+
+    private final Text errormsg;
+
+
     public InsertDocument(String buttonName, Image icon) {
         super(buttonName, icon);
 
@@ -111,6 +128,10 @@ public class InsertDocument extends Tab {
         insertDoc.setPrefSize(300 * SCALE, 25 * SCALE);
         insertDoc.getStyleClass().add("squircle-button");
         insertDoc.setFont(new Font(FONT_SIZE));
+        addButtonListener();
+        errormsg = new Text("All fields need to be filled before inserting!");
+        errormsg.setFill(Color.RED);
+        errormsg.setVisible(false);
     }
 
     @Override
@@ -132,6 +153,7 @@ public class InsertDocument extends Tab {
         gridPane.add(nameBox, 1, 3);
         gridPane.add(insertDoc, 1, 4);
         gridPane.add(select, 2, 0);
+        gridPane.add(errormsg, 1, 5);
         borderPane.setCenter(gridPane);
         //borderPane.setMaxSize(500, 250);
         //borderPane.setTop(createToolBar());
@@ -191,9 +213,9 @@ public class InsertDocument extends Tab {
     private ComboBox<Item> createItemDropDown(ArrayList<Item> items){
 
         ObservableList<Item> options = FXCollections.observableArrayList();
-        Iterator<Item> itr = items.iterator();
-        while(itr.hasNext()){
-            options.add(itr.next());
+        Item[] list = Database.db.getItems();
+        for(int i = 0; i < list.length; i++){
+            options.add(list[i]);
         }
         ComboBox temp = new ComboBox(options);
         temp.getStyleClass().add("combo-box");
@@ -202,5 +224,42 @@ public class InsertDocument extends Tab {
         return temp;
         
     }
+
+    private void addButtonListener(){
+
+        select.setOnAction(e -> {
+            Stage temp = new Stage();
+            DirectoryChooser chooser = new DirectoryChooser();
+            myFile = chooser.showDialog(temp);
+            if(myFile != null){
+                filePathBox.setText(myFile.getPath());
+                System.out.println(filePathBox.getText());
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.getDialogPane().setExpandableContent(new ScrollPane(new TextArea("inValid file path!")));
+                alert.showAndWait();
+            }
+
+            }
+        );
+
+        insertDoc.setOnAction(e -> {
+            if(filePathBox.getText().equals("") || objectBox.getValue() == null || nameBox.getText().equals("")){
+                errormsg.setVisible(true);
+            } else{
+                errormsg.setVisible(false);
+                pathStr = filePathBox.getText();
+                selectItem = (Item) objectBox.getValue();
+                nameStr = nameBox.getText();
+                ItemFile doc = new ItemFile(nameStr, pathStr);
+                selectItem.addFile(doc);
+            }
+
+            }
+        );
+    }
+
+
+
 
 }
