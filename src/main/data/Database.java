@@ -42,8 +42,9 @@ public class Database {
         items = new ArrayList<Item>();
         for (int i = 0; i < itemsArray.length(); i++) {
             JSONObject itemObj = itemsArray.getJSONObject(i);
-            items.add(createItem(itemObj));
+            createItem(itemObj);
         }
+        System.out.println(items.toString());
     }
 
     /*
@@ -148,6 +149,17 @@ public class Database {
      */
     public Item[] getItems() {
         return (Item[])items.toArray(new Item[items.size()]);
+    }
+
+
+    public int getIndex(Item theItem){
+        for(int i = 0; i < items.size(); i++){
+            if(theItem.equals(items.get(i)))
+            {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
     /*

@@ -24,6 +24,7 @@ import main.data.ItemFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static javafx.application.Application.launch;
@@ -72,7 +73,7 @@ public class InsertDocument extends Tab {
 
     /** Text fields */
     private final TextField filePathBox;
-    private final ComboBox objectBox;
+    private ComboBox objectBox;
     private final TextField nameBox;
 
     /** Buttons */
@@ -104,6 +105,7 @@ public class InsertDocument extends Tab {
         //sets up the text fields
         filePathBox = createField();
 
+        /*
         //sample items setup
         String[] nameOfItem = {"DishWasher", "Wifi", "RentalDocuments", "SomeOtherGoodThings"};
         // test for a simple item list
@@ -111,12 +113,8 @@ public class InsertDocument extends Tab {
         for(int i = 0; i < nameOfItem.length; i++){
             Item temp = new Item(Database.db, nameOfItem[i]);
             items.add(temp);
-        }
+        }*/
 
-        objectBox = createItemDropDown(items);
-        objectBox.setOnAction( e -> {
-            System.out.println(objectBox.getValue().getClass());
-        });
 
         nameBox = createField();
 
@@ -124,8 +122,6 @@ public class InsertDocument extends Tab {
         select = new Button("Select");
         select.getStyleClass().add("squircle-button");
         select.setFont(new Font(FONT_SIZE));
-
-
 
         //sets up the insert document button
         insertDoc = new Button("Insert Document");
@@ -150,6 +146,14 @@ public class InsertDocument extends Tab {
     public Pane buildView(Stage stage) {
         clearTextFields();
 
+        ArrayList<Item> items = new ArrayList<Item>();
+        items.addAll(Arrays.asList(Database.db.getItems()));
+        objectBox = createItemDropDown(items);
+        objectBox.setOnAction( e -> {
+            if(objectBox.getValue() != null)
+                System.out.println(objectBox.getValue().getClass());
+        });
+
         borderPane = new BorderPane();
         gridPane = new GridPane();
 
@@ -170,6 +174,12 @@ public class InsertDocument extends Tab {
         borderPane.setCenter(gridPane);
         //borderPane.setMaxSize(500, 250);
         //borderPane.setTop(createToolBar());
+        return borderPane;
+    }
+
+    public Pane buildView(Stage theStage, int selectedItem){
+        buildView(theStage);
+        objectBox.getSelectionModel().select(selectedItem);
         return borderPane;
     }
 

@@ -3,6 +3,8 @@ module MacroSoft.TCSS360 {
     requires javafx.fxml;
     requires javafx.web;
     requires org.json;
+    requires java.desktop;
+    requires org.apache.commons.io;
 
     opens main.GUI to javafx.fxml;
     exports archive;
