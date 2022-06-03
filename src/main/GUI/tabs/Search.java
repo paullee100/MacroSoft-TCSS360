@@ -1,16 +1,23 @@
 package main.GUI.tabs;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.GUI.Tab;
+import main.data.Database;
+import main.data.Item;
 import main.data.ItemFile;
 
 import java.awt.*;
@@ -47,24 +54,32 @@ public class Search extends Tab {
      * Array of Items
      */
     private String[] itemsListData = {"Remote", "Example1", "Example2"};
-    private String[] itemsList;
-    private String[] filesList;
+    private Item[] items;
+    private Item[] itemsList;
+    private Item[] filesList;
 
     /**
      * Text to show Search
      */
-    private final Text Searching;
+    private final Text selectText;
+    private final Text searchingText;
+    private final Text errormsg;
+    /**
+     * Drop down box
+     */
+    private ChoiceBox<String> choiceBox;
+
     /**
      * Text field that allows user to search
      */
-    private final TextField SearchingBox;
+    private final TextField searchingBox;
 
     /**
      * Buttons
      */
-    private final Button MagGlass;
+    private final Button magGlass;
 
-    private final Button Select;
+    //private final Button selectButton;
 
     /**
      * Constructor that class the super method from the tabs class.
@@ -79,42 +94,72 @@ public class Search extends Tab {
         super(buttonName, icon);
 
         //Text to prompt which type of search
-        //Selecting = new Text("Select");
+        selectText = new Text("Select");
+        selectText.getStyleClass().add("white-text");
+
 
         //Dropdown box for user to choose type
-        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox = new ChoiceBox<>();
 
         choiceBox.getItems().add("Items");
         choiceBox.getItems().add("Files");
+        //default dropdown box setting
+        choiceBox.setValue("Items");
 
-        Select = new Button("Select");
+        String choice = choiceBox.getValue();
 
-        Select.setOnAction(e -> getChoice(choiceBox));
+//        selectButton = new Button("Select");
+//
+//        selectButton.setOnAction(e -> getChoice(choiceBox));
+
 
         //Text to prompt which type of search
-        Searching = new Text("Searching");
+        searchingText = new Text("Searching");
+        searchingText.getStyleClass().add("white-text");
 
         //Text field for the user to type what they're searching
-        Searching.getStyleClass().add("white-text");
-        SearchingBox = new TextField();
-        SearchingBox.setMinSize(100, 25);
+        searchingBox = new TextField();
+        searchingBox.setMinSize(100, 25);
 
         //Sets up the Search button
-        MagGlass = new Button();
-        MagGlass.getStyleClass().add("transparent-square-button");
+        magGlass = new Button();
+        magGlass.getStyleClass().add("transparent-square-button");
         ImageView Arrowimage = new ImageView(new Image("/searchIcon.png"));
         Arrowimage.setFitHeight(BUTTON_SIZE * .20);
         Arrowimage.setFitWidth(BUTTON_SIZE * .40);
-        MagGlass.setGraphic(Arrowimage);
+        magGlass.setGraphic(Arrowimage);
+
+        //get what user is searching for
+        final String[] userSearching = new String[1];
+        magGlass.setOnAction(e -> {
+            userSearching[0] = searchingBox.getText();
+        });
+        String userSearch = userSearching[0];
 
         //Depending on what user choose, different database
-        if (Select.equals("Items")) {
-            String item = SearchingBox.getText();
-            searchItem(item);
-        } else if (Select.equals("Files")) {
-            String file = SearchingBox.getText();
-            searchFile(file);
+//        if (selectButton.equals("Items")) {
+//            String item = searchingBox.getText();
+//            searchItem(item);
+//        } else if (selectButton.equals("Files")) {
+//            String file = searchingBox.getText();
+//            searchFile(file);
+//        }
+
+        if (choice.equals("Items")) {
+            String item = searchingBox.getText();
+            searchItem(userSearch);
+        } else { //if (choice.equals("Files"))
+            String file = searchingBox.getText();
+            searchFile(userSearch);
         }
+
+
+        //sets up error message
+        javafx.scene.text.Font font = Font.font("Verdana", FontWeight.BOLD, 25);
+        errormsg = new Text("This does not exist!");
+        errormsg.setFill(Color.RED);
+        errormsg.setVisible(false);
+        errormsg.setFont(font);
     }
 
     /**
@@ -133,12 +178,16 @@ public class Search extends Tab {
         gridPane.setHgap(5);
         gridPane.setVgap(5);
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.add(MagGlass, 2, 0);
-        gridPane.add(Searching, 0, 0);
-        gridPane.add(SearchingBox, 1, 0);
+        gridPane.add(selectText, 0, 0);
+        gridPane.add(choiceBox, 1, 0);
+
+        gridPane.add(searchingText, 0, 2);
+        gridPane.add(searchingBox, 1, 2);
+        gridPane.add(magGlass, 2, 2);
+        gridPane.add(errormsg, 1, 4);
         borderPane.setCenter(gridPane);
         borderPane.setMaxSize(500, 250);
-        //borderPane.setTop(createToolBar());
+
         return borderPane;
     }
 
@@ -146,13 +195,25 @@ public class Search extends Tab {
     /**
      * Searching Items(database)
      */
-    public String[] searchItem(String Item) {
-        //items = Database.db.getItems();
-        for (int i = 0; i < itemsListData.length; i++) {
+    public Item[] searchItem(String Item) {
+        items = Database.db.getItems();
+        for (int i = 0; i < items.length; i++) {
             //if have searched term, add to list
-            if (itemsListData[i].equals(Item)) {
-                itemsList[i] = itemsListData[i];
+            if (items[i].equals(Item)) {
+                itemsList[i] = items[i];
             }
+        }
+
+        //should be able to search with shorter characters
+//        for (int i = 0; i < items.length; i++) {
+//            //if have searched term, add to list
+//            if (items[i].indexOf(Item)) {
+//                itemsList[i] = items[i];
+//            }
+//        }
+
+        if (itemsList.length == 0) {
+            errormsg.setVisible(true);
         }
         return itemsList;
     }
@@ -160,15 +221,22 @@ public class Search extends Tab {
     /**
      * Searching Files
      */
-    public String[] searchFile(String File) {
+    public Item[] searchFile(String File) {
         //items.getFiles();
-        for (int i = 0; i < itemsListData.length; i++) {
+        items = Database.db.getItems();
+        for (int i = 0; i < items.length; i++) {
+            items[i].getFiles();
             //if have searched term, add to list
-            if (itemsListData[i].equals(File)) {
-                filesList[i] = itemsListData[i];
+            if ((items[i].getName()).equals(File)) {
+                itemsList[i] = items[i];
             }
+
         }
-        return filesList;
+        if (itemsList.length == 0) {
+            errormsg.setVisible(true);
+        }
+
+        return itemsList;
     }
 
     /**
