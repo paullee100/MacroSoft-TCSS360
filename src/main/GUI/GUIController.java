@@ -54,6 +54,8 @@ public class GUIController extends Application {
     /** keeps track of where the mouse was clicked for drag event */
     private double mouseX, mouseY;
 
+    public static GUIController guiControl;
+
     /**
      * Starts up with the log in screen
      * in the LoginScreen class to check the credentials before
@@ -63,6 +65,7 @@ public class GUIController extends Application {
      */
     @Override
     public void start(Stage stage) {
+        guiControl = this;
 
         myStage = stage;
         myStage.initStyle(StageStyle.UNDECORATED);
@@ -85,7 +88,7 @@ public class GUIController extends Application {
      * this method is called after login is successful.
      */
     public void buildMainView() {
-        VBox tabs = tabChanger();
+        VBox tabChanger = tabChanger();
 
         mainPane = new BorderPane();
 
@@ -94,12 +97,13 @@ public class GUIController extends Application {
         myStage.setScene(mainScene);
 
         //Add the elements
-        mainPane.setLeft(tabs);
+        mainPane.setLeft(tabChanger);
         myStage.setMaximized(true);
 
         //Sets up the toolbar
         mainPane.setTop(createToolBar());
         //testItemDisplay();
+        mainPane.setCenter(tabs[0].buildView(myStage));
     }
 
     /**
@@ -183,6 +187,8 @@ public class GUIController extends Application {
         Background background = new Background(new BackgroundFill(Color.rgb(40, 43, 56), CornerRadii.EMPTY, Insets.EMPTY));
         tabBar.setBackground(background);
         //tabBar.getChildren().addAll(home, search, insertDoc);
+        //Set the home screen to be on
+
         return tabBar;
     }
 
@@ -229,6 +235,10 @@ public class GUIController extends Application {
         });
 
         return tabButton;
+    }
+
+    public void insertDocToItem (int itemIndex){
+        mainPane.setCenter(((InsertDocument) tabs[2]).buildView(myStage, itemIndex));
     }
 
     /**

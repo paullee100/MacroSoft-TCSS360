@@ -64,7 +64,7 @@ public class Search extends Tab {
      */
     private final Button MagGlass;
 
-    private final Button Select = null;
+    private final Button Select;
 
     /**
      * Constructor that class the super method from the tabs class.
@@ -86,6 +86,8 @@ public class Search extends Tab {
 
         choiceBox.getItems().add("Items");
         choiceBox.getItems().add("Files");
+
+        Select = new Button("Select");
 
         Select.setOnAction(e -> getChoice(choiceBox));
 

@@ -129,7 +129,6 @@ public class WorkDirectoryChooser {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-
                 }else{
                     Database.db = new Database(myFile.getPath());
                 }
