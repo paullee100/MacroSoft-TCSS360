@@ -212,9 +212,13 @@ public class Search extends Tab {
 //            }
 //        }
 
-        if (itemsList.length == 0) {
-            errormsg.setVisible(true);
-        }
+          //error message if nothing matched
+//        if (itemsList == null) {
+//            errormsg.setVisible(true);
+//        }
+//        if (itemsList.length < 1) {
+//            errormsg.setVisible(true);
+//        }
         return itemsList;
     }
 
@@ -232,9 +236,9 @@ public class Search extends Tab {
             }
 
         }
-        if (itemsList.length == 0) {
-            errormsg.setVisible(true);
-        }
+//        if (itemsList.length == 0) {
+//            errormsg.setVisible(true);
+//        }
 
         return itemsList;
     }
