@@ -17,10 +17,8 @@ import main.data.Database;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Objects;
 
 /**
  * Picks a working directory to use for the database.
@@ -104,6 +102,9 @@ public class WorkDirectoryChooser {
         //Creates the toolbar
         mainPane.setTop(myController.createToolBar());
 
+        //Checks for a stored directory
+        directoryInput.setText(checkSavedDirectory());
+
         //Set up button actions
         selectButton.setOnAction(clickEvent -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -126,6 +127,7 @@ public class WorkDirectoryChooser {
                         System.out.println("Found JSON");
                         JSONObject theJSON = new JSONObject(tokener);
                         Database.db = new Database(theJSON);
+                        saveDirectory();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -139,9 +141,7 @@ public class WorkDirectoryChooser {
         });
 
         //Reset the error message when the text field is clicked on
-        directoryInput.setOnMouseClicked(clickEvent -> {
-            myErrorDisplay.setText("");
-        });
+        directoryInput.setOnMouseClicked(clickEvent -> myErrorDisplay.setText(""));
 
         //Sets up and adds everything to the content pane
         contentPane.setAlignment(Pos.CENTER);
@@ -189,5 +189,42 @@ public class WorkDirectoryChooser {
     private boolean verifyDirectory() {
         myFile = new File(directoryInput.getText());
         return myFile.exists() && myFile.isDirectory();
+    }
+
+    /**
+     * Checks to see if there is a working directory
+     * @return the file path to the directory
+     */
+    private String checkSavedDirectory() {
+        try {
+            FileReader dirReader = new FileReader(getDir());
+            BufferedReader buffReader = new BufferedReader(dirReader);
+            String directory = buffReader.readLine();
+            buffReader.close();
+            dirReader.close();
+            File dirFile = new File(directory);
+            return dirFile.exists() ? directory : "";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Saves the file path to the filepath.txt
+     */
+    private void saveDirectory() {
+        try {
+            FileWriter dirWriter = new FileWriter(getDir());
+            dirWriter.write(directoryInput.getText());
+            dirWriter.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private String getDir(){
+        return Objects.requireNonNull(getClass().getClassLoader().getResource("filePath.txt")).getPath();
     }
 }
