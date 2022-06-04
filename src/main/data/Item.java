@@ -9,11 +9,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Item {
-    private Database database;
-    private String name;
-    private ArrayList<ItemFile> files;
+    private Database myDatabase;
+    private String myName;
+    private ArrayList<ItemFile> myFiles;
+    private ArrayList<String> myTags;
+    private String myDescription;
 
     /**
      * Constructor
@@ -21,9 +24,27 @@ public class Item {
      * @param name the name of the item
      */
     public Item(Database database, String name) {
-        this.database = database;
-        this.name = name;
-        files = new ArrayList<ItemFile>();
+        this(database, name, null, "");
+    }
+
+    /**
+     * @param database database this item exists in
+     * @param name name of the item
+     * @param tags tags attatched to this item
+     * @param description description of the item
+     */
+    public Item(Database database, String name, String[] tags, String description){
+        this.myDatabase = database;
+        this.myName = name;
+        myFiles = new ArrayList<ItemFile>();
+        if(tags == null)
+            myTags = new ArrayList<String>();
+        else
+            for(String tag : tags){
+                addTag(tag);
+            }
+        myDescription = description;
+
     }
 
     /**
@@ -32,20 +53,20 @@ public class Item {
      * @param json a JSON object that represents the item
      */
     public Item(Database database, JSONObject json) throws IllegalArgumentException {
-        this.database = database;
+        this.myDatabase = database;
 
         if (!json.has("name"))
             throw new IllegalArgumentException("JSONObject must have a name key");
         if (!json.has("files"))
             throw new IllegalArgumentException("JSONObject must have a files key");
 
-        this.name = json.getString("name");
+        this.myName = json.getString("name");
 
-        files = new ArrayList<ItemFile>();
+        myFiles = new ArrayList<ItemFile>();
         JSONArray filesArray = json.getJSONArray("files");
         for (int i = 0; i < filesArray.length(); i++) {
             JSONObject obj = filesArray.getJSONObject(i);
-            files.add(new ItemFile(obj));
+            myFiles.add(new ItemFile(obj));
         }
     }
 
@@ -55,7 +76,22 @@ public class Item {
      * @return the name of the item
      */
     public String getName() {
-        return name;
+        return myName;
+    }
+
+    public String getDescription() {return myDescription;}
+
+    public String[] getTag() {
+        return (String[]) myTags.toArray().clone();
+    }
+
+    public void addTag(String tag) {
+        if (myDatabase.hasTag(tag))
+            myTags.add(tag.toLowerCase());
+    }
+
+    public void removeTag(String tag) {
+        myTags.remove(tag.toLowerCase());
     }
 
     /**
@@ -72,7 +108,7 @@ public class Item {
 
         }
 
-        files.add(file);
+        myFiles.add(file);
     }
 
     /**
@@ -93,7 +129,7 @@ public class Item {
         if (file == null)
             return;
 
-        files.remove(file);
+        myFiles.remove(file);
     }
 
     /**
@@ -111,7 +147,7 @@ public class Item {
      * @return a ItemFile array of the files contained within the object
      */
     public ItemFile[] getFiles() {
-        return (ItemFile[])files.toArray(new ItemFile[files.size()]);
+        return (ItemFile[]) myFiles.toArray(new ItemFile[myFiles.size()]);
     }
 
     /**
@@ -121,7 +157,7 @@ public class Item {
      * @return an ItemFile with the given name, or null if such ItemFile does not exist
      */
     public ItemFile getFile(String name) {
-        for (ItemFile f : files) {
+        for (ItemFile f : myFiles) {
             if (f.getName().equals(name))
                 return f;
         }
@@ -142,23 +178,23 @@ public class Item {
      * Caches the files locally
      */
     public void cacheFiles() throws IOException {
-        File filesDir = new File(database.getWorkingDirectory() + "/files/");
+        File filesDir = new File(myDatabase.getWorkingDirectory() + "/files/");
         if (!filesDir.exists())
             filesDir.mkdir();
 
-        File localDir = new File(database.getWorkingDirectory() + "/files/" + name + "/");
+        File localDir = new File(myDatabase.getWorkingDirectory() + "/files/" + myName + "/");
         if (!localDir.exists())
             localDir.mkdir();
 
         String localDirStr = localDir.getAbsolutePath();
 
-        for (int i = 0; i < files.size(); i++) {
-            ItemFile itemFile = files.get(i);
+        for (int i = 0; i < myFiles.size(); i++) {
+            ItemFile itemFile = myFiles.get(i);
             File srcFile = new File(itemFile.getPath());
             String cachedPath = localDirStr + "/" + FilenameUtils.getName(srcFile.getPath());
             Files.copy(srcFile.toPath(), (new File(cachedPath).toPath()), StandardCopyOption.REPLACE_EXISTING);
             ItemFile cachedItemFile = new ItemFile(itemFile.getName(), (new File(cachedPath).toPath()).toString());
-            files.set(i, cachedItemFile);
+            myFiles.set(i, cachedItemFile);
         }
     }
 
@@ -169,18 +205,20 @@ public class Item {
      */
     public JSONObject toJSONObject() {
         JSONArray filesArray = new JSONArray();
-        for (ItemFile file : files) {
+        for (ItemFile file : myFiles) {
             filesArray.put(file.toJSONObject());
         }
 
         JSONObject object = new JSONObject();
-        object.put("name", name);
+        object.put("name", myName);
         object.put("files", filesArray);
+        object.put("tags", myTags);
+        object.put("description", myDescription);
 
         return object;
     }
 
     public String toString(){
-        return name;
+        return myName;
     }
 }
