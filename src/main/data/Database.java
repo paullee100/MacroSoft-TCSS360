@@ -14,6 +14,7 @@ public class Database {
     public static Database db = null;
     private String workingDir;
     private ArrayList<Item> items;
+    private ArrayList<String> tags;
 
     /*
      * Constructor
@@ -42,8 +43,9 @@ public class Database {
         items = new ArrayList<Item>();
         for (int i = 0; i < itemsArray.length(); i++) {
             JSONObject itemObj = itemsArray.getJSONObject(i);
-            items.add(createItem(itemObj));
+            createItem(itemObj);
         }
+        System.out.println(items.toString());
     }
 
     /*
@@ -147,7 +149,40 @@ public class Database {
      * @return an array of items
      */
     public Item[] getItems() {
-        return (Item[])items.toArray(new Item[items.size()]);
+        return (Item[]) items.toArray(new Item[items.size()]);
+    }
+
+    public String[] getTags() {
+        return (String[]) tags.toArray().clone();
+    }
+
+    public void addTag(String theTag) {
+        if(hasTag(theTag))
+            tags.add(theTag.toLowerCase());
+    }
+
+    public void removeTag(String theTag) {
+
+    }
+
+    public boolean hasTag(String theTag) {
+        for(String aTag : tags) {
+            if(aTag.toLowerCase().equals(theTag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public int getIndex(Item theItem){
+        for(int i = 0; i < items.size(); i++){
+            if(theItem.equals(items.get(i)))
+            {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
     /*
@@ -161,6 +196,7 @@ public class Database {
             itemsArray.add(item.toJSONObject());
         JSONObject obj = new JSONObject();
         obj.put("workingDir", workingDir);
+        obj.put("tags", tags);
         obj.put("items", new JSONArray(itemsArray));
         return obj;
     }

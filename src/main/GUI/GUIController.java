@@ -54,6 +54,8 @@ public class GUIController extends Application {
     /** keeps track of where the mouse was clicked for drag event */
     private double mouseX, mouseY;
 
+    public static GUIController guiControl;
+
     /**
      * Starts up with the log in screen
      * in the LoginScreen class to check the credentials before
@@ -63,6 +65,7 @@ public class GUIController extends Application {
      */
     @Override
     public void start(Stage stage) {
+        guiControl = this;
 
         myStage = stage;
         myStage.initStyle(StageStyle.UNDECORATED);
@@ -85,7 +88,7 @@ public class GUIController extends Application {
      * this method is called after login is successful.
      */
     public void buildMainView() {
-        VBox tabs = tabChanger();
+        VBox tabChanger = tabChanger();
 
         mainPane = new BorderPane();
 
@@ -94,17 +97,19 @@ public class GUIController extends Application {
         myStage.setScene(mainScene);
 
         //Add the elements
-        mainPane.setLeft(tabs);
+        mainPane.setLeft(tabChanger);
         myStage.setMaximized(true);
 
         //Sets up the toolbar
         mainPane.setTop(createToolBar());
         //testItemDisplay();
+        mainPane.setCenter(tabs[0].buildView(myStage));
     }
 
     /**
      * Generates a custom title/toolbar for the application
      * @return a horizontal box with min, max, and close buttons
+     * @author Gabe
      */
     public HBox createToolBar() {
         HBox toolBar = new HBox();
@@ -166,6 +171,7 @@ public class GUIController extends Application {
      * This creates the tab changer that exists on the left side of the application.
      * When a tab button is pressed, the tab will change.
      * @return a vertical box with buttons for changing tabs.
+     * @author Gabe
      */
     private VBox tabChanger() {
         createTabs();
@@ -183,11 +189,14 @@ public class GUIController extends Application {
         Background background = new Background(new BackgroundFill(Color.rgb(40, 43, 56), CornerRadii.EMPTY, Insets.EMPTY));
         tabBar.setBackground(background);
         //tabBar.getChildren().addAll(home, search, insertDoc);
+        //Set the home screen to be on
+
         return tabBar;
     }
 
     /**
      * This initializes the tabs and generates all their tab buttons.
+     * @author Gabe
      */
     private void createTabs() {
         //Initialize tabs
@@ -206,6 +215,12 @@ public class GUIController extends Application {
         }
     }
 
+    /**
+     * Builds a button that calls save and cacheAllFiles on the database
+     * @param buttonSize is the size of both the height and width of the button
+     * @return the save button
+     * @author Gabe
+     */
     private Button createSaveTab(double buttonSize){
         Image icon = new Image("/save.png");
 
@@ -229,6 +244,10 @@ public class GUIController extends Application {
         });
 
         return tabButton;
+    }
+
+    public void insertDocToItem (int itemIndex){
+        mainPane.setCenter(((InsertDocument) tabs[2]).buildView(myStage, itemIndex));
     }
 
     /**

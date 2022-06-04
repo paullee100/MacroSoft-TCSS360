@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import main.GUI.ItemDisplay;
 import main.GUI.Tab;
 import main.data.Database;
+import main.data.Item;
 import main.data.ItemFile;
 
 /**
@@ -48,6 +49,8 @@ public class ItemController extends Tab {
     /** The text that appears on top of the borderpane */
     private Text titleText;
 
+    private Stage myStage;
+
     /**
      * Constructor that calls the super method from the tabs class.
      *
@@ -56,6 +59,7 @@ public class ItemController extends Tab {
      */
     public ItemController(String buttonName, Image icon) {
         super(buttonName, icon);
+        /*
         Database.db.createItem("TV");
         Database.db.createItem("Computers");
 
@@ -71,6 +75,7 @@ public class ItemController extends Tab {
 
         Database.db.getItems()[1].addFile(itemFile3);
         Database.db.getItems()[1].addFile(itemFile4);
+        */
     }
 
     /**
@@ -109,6 +114,8 @@ public class ItemController extends Tab {
 
         testItemDisplay(stage);
 
+        if(myStage == null) myStage = stage;
+
         return buttonPane;
     }
 
@@ -119,8 +126,12 @@ public class ItemController extends Tab {
      */
     private void testItemDisplay(Stage stage) {
         ItemDisplay newItemDisplay = new ItemDisplay(stage);
-        itemButtons[0].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[0])));
-        itemButtons[1].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[1])));
+        //itemButtons[0].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[0])));
+        //itemButtons[1].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[1])));
+        for (int i = 0; i < itemButtons.length; i ++) {
+            int finalI = i;
+            itemButtons[i].setOnAction(e -> buttonPane.setCenter(newItemDisplay.buildView(Database.db.getItems()[finalI])));
+        }
     }
 
     /**
@@ -238,6 +249,7 @@ public class ItemController extends Tab {
                 // Added spaces in the titleText to appear correctly in the GUI.
                 titleText.setText("MacroSoft360's Program                              ");
             }
+            testItemDisplay(myStage);
         });
     }
 
@@ -308,6 +320,7 @@ public class ItemController extends Tab {
                 // Added spaces in the titleText to appear correctly in the GUI.
                 titleText.setText("MacroSoft360's Program                              ");
             }
+            testItemDisplay(myStage);
         });
     }
 
