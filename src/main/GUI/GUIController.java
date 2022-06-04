@@ -109,6 +109,7 @@ public class GUIController extends Application {
     /**
      * Generates a custom title/toolbar for the application
      * @return a horizontal box with min, max, and close buttons
+     * @author Gabe
      */
     public HBox createToolBar() {
         HBox toolBar = new HBox();
@@ -170,6 +171,7 @@ public class GUIController extends Application {
      * This creates the tab changer that exists on the left side of the application.
      * When a tab button is pressed, the tab will change.
      * @return a vertical box with buttons for changing tabs.
+     * @author Gabe
      */
     private VBox tabChanger() {
         createTabs();
@@ -194,6 +196,7 @@ public class GUIController extends Application {
 
     /**
      * This initializes the tabs and generates all their tab buttons.
+     * @author Gabe
      */
     private void createTabs() {
         //Initialize tabs
@@ -212,6 +215,12 @@ public class GUIController extends Application {
         }
     }
 
+    /**
+     * Builds a button that calls save and cacheAllFiles on the database
+     * @param buttonSize is the size of both the height and width of the button
+     * @return the save button
+     * @author Gabe
+     */
     private Button createSaveTab(double buttonSize){
         Image icon = new Image("/save.png");
 
