@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
 /**
@@ -200,13 +201,15 @@ public class WorkDirectoryChooser {
             FileReader dirReader = new FileReader(getDir());
             BufferedReader buffReader = new BufferedReader(dirReader);
             String directory = buffReader.readLine();
+            if(directory == null) return "";
             buffReader.close();
             dirReader.close();
-            File dirFile = new File(directory);
+            File dirFile;
+            dirFile = new File(directory);
             return dirFile.exists() ? directory : "";
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
@@ -225,6 +228,6 @@ public class WorkDirectoryChooser {
     }
 
     private String getDir(){
-        return Objects.requireNonNull(getClass().getClassLoader().getResource("filePath.txt")).getPath();
+        return Objects.requireNonNull(getClass().getClassLoader().getResource("filepath.txt")).getPath();
     }
 }
