@@ -165,6 +165,15 @@ public class Item {
         return null;
     }
 
+    public boolean hasFilePath(String path){
+        for (ItemFile f: myFiles){
+            if(f.getPath().equals(path)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Checks whether or not an ItemFile exists within the item
      *

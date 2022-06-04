@@ -66,34 +66,79 @@ public class InsertDocument extends Tab {
      */
     private GridPane gridPane;
 
-    /** Text */
+    /**
+     * Text for file Path
+     */
     private final Text filePath;
+
+    /**
+     * Text for the Item
+     */
     private final Text obj;
+
+    /**
+     * Text for the file name
+     */
     private final Text name;
 
-    /** Text fields */
+    /**
+     * Text field for the file path
+     */
     private final TextField filePathBox;
+
+    /**
+     * the Dropdown menu for the Items
+     */
     private ComboBox objectBox;
+
+    /**
+     * Text field for file name
+     */
     private final TextField nameBox;
 
-    /** Buttons */
+    /**
+     * Select button
+     */
     private final Button select;
+
+    /**
+     * Button to insert the file
+     */
     private final Button insertDoc;
 
-    /** String for filepath, item and name */
+    /** String for filepath and name */
     private String pathStr = "";
-
-    private Item selectItem = null;
-
     private String nameStr = "";
 
+    /**
+     * The Item selected by user
+     */
+    private Item selectItem = null;
+
+    /**
+     * Import file object
+     */
     private File myFile;
 
+    /**
+     * Error message that will pop in future
+     */
     private final Text errormsg;
 
+    /**
+     * Success message pop up when insert file is success
+     */
     private final Text SuccessMsg;
 
 
+    /**
+     * Constructor of the InsertDocument GUI, calling
+     * methods from the super tab class
+     *
+     *
+     * @param buttonName name of the button
+     * @param icon icon of the button
+     */
     public InsertDocument(String buttonName, Image icon) {
         super(buttonName, icon);
 
@@ -142,8 +187,18 @@ public class InsertDocument extends Tab {
 
     }
 
+    /**
+     * Builds the overall GUI of the InsertDocument
+     * Including the Buttons to let user select file
+     * and insert document.
+     *
+     * @param stage
+     * @return
+     */
     @Override
     public Pane buildView(Stage stage) {
+        errormsg.setText("");
+        SuccessMsg.setText("");
         clearTextFields();
 
         ArrayList<Item> items = new ArrayList<Item>();
@@ -156,21 +211,20 @@ public class InsertDocument extends Tab {
 
         borderPane = new BorderPane();
         gridPane = new GridPane();
-
         gridPane.setPrefSize(stage.getWidth()/2,  stage.getMaxHeight()/2);
         gridPane.setHgap(5);
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
         gridPane.add(filePath, 0, 0);
-        gridPane.add(obj, 0, 1);
-        gridPane.add(name, 0, 3);
+        gridPane.add(name, 0, 1);
+        gridPane.add(obj, 0, 2);
         gridPane.add(filePathBox, 1, 0);
-        gridPane.add(objectBox, 1, 1);
-        gridPane.add(nameBox, 1, 3);
-        gridPane.add(insertDoc, 1, 4);
+        gridPane.add(objectBox, 1, 2);
+        gridPane.add(nameBox, 1, 1);
+        gridPane.add(insertDoc, 1, 3);
         gridPane.add(select, 2, 0);
-        gridPane.add(errormsg, 1, 5);
-        gridPane.add(SuccessMsg,1,5);
+        gridPane.add(errormsg, 1, 4);
+        gridPane.add(SuccessMsg,1,4);
         borderPane.setCenter(gridPane);
         //borderPane.setMaxSize(500, 250);
         //borderPane.setTop(createToolBar());
@@ -183,11 +237,19 @@ public class InsertDocument extends Tab {
         return borderPane;
     }
 
+    /**
+     * Method that clears the text in all text fields
+     *
+     */
     private void clearTextFields() {
         filePathBox.clear();
         nameBox.clear();
     }
 
+    /**
+     * Metehod that create the textfield
+     * @return the created textfield
+     */
     private TextField createField() {
         TextField theField = new TextField();
         theField.setMinSize(100 * SCALE, 25 * SCALE);
@@ -196,6 +258,11 @@ public class InsertDocument extends Tab {
         return theField;
     }
 
+    /**
+     * Method that creates an javafx text object
+     * @param text the text want to be filled in into the javafx text object
+     * @return the created text object
+     */
     private Text createText(String text) {
         Text theText = new Text(text);
         theText.getStyleClass().add("white-text");
@@ -233,6 +300,12 @@ public class InsertDocument extends Tab {
         return toolBar;
     }
 
+    /**
+     * create the comboBox item that has list of item in the database
+     * for user to select
+     * @param items the database item list
+     * @return the created ComboBox item
+     */
     private ComboBox<Item> createItemDropDown(ArrayList<Item> items){
 
         ObservableList<Item> options = FXCollections.observableArrayList();
@@ -248,6 +321,9 @@ public class InsertDocument extends Tab {
         
     }
 
+    /**
+     * Add Action listener to the buttons
+     */
     private void addButtonListener(){
 
         select.setOnAction(e -> {
@@ -257,6 +333,7 @@ public class InsertDocument extends Tab {
             if(myFile.exists() && myFile.isFile()){
                 errormsg.setVisible(false);
                 filePathBox.setText(myFile.getPath());
+                nameBox.setText(myFile.getName());
                 System.out.println(filePathBox.getText());
             } else {
                 errormsg.setText("Invalid file path or File does not exist!");
@@ -268,26 +345,30 @@ public class InsertDocument extends Tab {
 
         insertDoc.setOnAction(e -> {
             myFile = new File(filePathBox.getText());
-            if(!myFile.exists()){
-                errormsg.setText("File does not exist!");
+            selectItem = (Item) objectBox.getValue();
+            if(filePathBox.getText().equals("") || objectBox.getValue() == null || nameBox.getText().equals("")) {
+                errormsg.setText("All fields need to be filled before inserting!");
                 SuccessMsg.setVisible(false);
                 errormsg.setVisible(true);
             }
-            else if(filePathBox.getText().equals("") || objectBox.getValue() == null || nameBox.getText().equals("")){
+            else if(!myFile.exists()){
+                errormsg.setText("File does not exist!");
                 SuccessMsg.setVisible(false);
                 errormsg.setVisible(true);
-            } else{
+            }else if(selectItem.hasFilePath(myFile.getPath())){
+                errormsg.setText("File already Exist!");
+                SuccessMsg.setVisible(false);
+                errormsg.setVisible(true);
+            }
+            else{
                 errormsg.setVisible(false);
                 errormsg.setText("All fields need to be filled before inserting!");
                 pathStr = filePathBox.getText();
-                selectItem = (Item) objectBox.getValue();
                 nameStr = nameBox.getText();
                 ItemFile doc = new ItemFile(nameStr, pathStr);
                 selectItem.addFile(doc);
                 SuccessMsg.setText("Inserting Successful! The File " + doc.getName() + " is now under item " + selectItem.getName() + "!");
                 SuccessMsg.setVisible(true);
-                objectBox.setValue(null);
-
 
                 
             }
