@@ -69,7 +69,6 @@ public class ItemController extends Tab {
      */
     @Override
     public Pane buildView(Stage stage) {
-        // Added spaces in the titleText to appear correctly in the GUI.
         titleText = new Text("MacroSoft360's Program");
         titleText.getStyleClass().add("white-text");
         titleText.setFont(Font.font("verdana", FontWeight.BOLD, 50));
@@ -187,7 +186,6 @@ public class ItemController extends Tab {
      * Method to allow the user to delete an item
      */
     private void deleteAItem() {
-        // Added spaces in the titleText to appear correctly in the GUI.
         titleText.setText("Select an item to delete:");
         for (int i = 0; i < Database.db.getItems().length; i++) {
             int index = i; // index is needed since "i" can't be used inside the lambda expression
@@ -227,11 +225,9 @@ public class ItemController extends Tab {
             if (type == confirmButton) {
                 Database.db.removeItem(index);
                 createItemGUI(buttonPane); // Calls back to update the GUI.
-                // Added spaces in the titleText to appear correctly in the GUI.
                 titleText.setText("MacroSoft360's Program");
             } else {
                 // User selected the "no" button.
-                // Added spaces in the titleText to appear correctly in the GUI.
                 titleText.setText("MacroSoft360's Program");
             }
             itemDisplay(myStage);
@@ -243,7 +239,6 @@ public class ItemController extends Tab {
      * Duplicate names are not allowed.
      */
     private void createAItem() {
-        // Added spaces in the titleText to appear correctly in the GUI.
         titleText.setText("Creating an item...");
 
         Text dupeDisplay = new Text();
