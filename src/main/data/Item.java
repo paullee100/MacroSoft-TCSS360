@@ -77,6 +77,10 @@ public class Item {
                 myTags.add(obj.toString());
             }
         }
+
+        if (json.has("description") {
+            myDescription = json.getString("description");
+        }
     }
 
     /**
